@@ -1,0 +1,10 @@
+﻿subject_id,subject_name,pass_ratio,excellent_ratio
+CHN,语文,0.6,0.85
+MAT,数学,0.6,0.85
+ENG,英语,0.6,0.85
+POL,道德与法治,0.6,0.85
+HIS,历史,0.6,0.85
+GEO,地理,0.6,0.85
+BIO,生物,0.6,0.85
+PHY,物理,0.6,0.85
+CHE,化学,0.6,0.85

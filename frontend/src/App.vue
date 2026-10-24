@@ -29,7 +29,7 @@ interface HistoricalResultTable {
 
 const SAVED_TABLE_LIMIT = 8
 const FIELD_LIBRARY_LIMIT = 12
-const prompts = ["查询本月各地区销售额", "按客户等级统计本月销售额", "对比本月各地区销售额和销售目标"]
+const prompts = ["八年级期中数学各班平均分和及格率是多少？", "各班本学期作业完成率和按时提交率是多少？", "查看本学期每月出勤率和迟到人次"]
 const input = ref("")
 const loading = ref(false)
 const pendingQuery = ref("")
@@ -46,8 +46,8 @@ const conversationScroll = ref<HTMLElement | null>(null)
 const authUser = ref<AuthUser | null>(null)
 const authReady = ref(false)
 const loginLoading = ref(false)
-const loginUsername = ref("admin")
-const loginPassword = ref("admin123")
+const loginUsername = ref("school")
+const loginPassword = ref("school123")
 
 const activeConversation = computed(() =>
   conversations.value.find((item) => item.id === activeConversationId.value),
@@ -163,8 +163,7 @@ const historyGroups = computed(() => {
 })
 const userRoleLabel = computed(() => {
   if (authUser.value?.role === "admin") return "全部数据权限"
-  if (authUser.value?.role === "analyst") return "仅 Mock 数据"
-  return "电商运营数据"
+  return "学校教学 · 模拟数据"
 })
 
 onMounted(async () => {
@@ -449,11 +448,11 @@ function clarificationHint(result: QueryResult) {
 </script>
 
 <template>
-  <div v-if="!authReady" class="auth-loading"><span></span><p>正在连接 AskData…</p></div>
+  <div v-if="!authReady" class="auth-loading"><span></span><p>正在连接 EduQuery…</p></div>
 
   <main v-else-if="!authUser" class="login-page">
     <section class="login-intro">
-      <div class="login-brand"><span>A</span><strong>AskData</strong></div>
+      <div class="login-brand"><span>E</span><strong>EduQuery</strong></div>
       <div>
         <p class="kicker">AI DATA ASSISTANT</p>
         <h1>用自然语言，<br>读懂你的数据。</h1>
@@ -464,7 +463,7 @@ function clarificationHint(result: QueryResult) {
 
     <section class="login-side">
       <form class="login-card" @submit.prevent="loginUser">
-        <header><span class="login-mark">A</span><div><h2>欢迎回来</h2><p>登录 AskData Studio</p></div></header>
+        <header><span class="login-mark">E</span><div><h2>欢迎回来</h2><p>登录 EduQuery</p></div></header>
         <label>
           <span>账号</span>
           <input v-model="loginUsername" autocomplete="username" placeholder="请输入账号">
@@ -480,25 +479,15 @@ function clarificationHint(result: QueryResult) {
 
         <div class="mock-accounts">
           <p>演示账号</p>
+          <button type="button" @click="useMockAccount('school', 'school123')">
+            <span class="account-icon user">教</span>
+            <span><strong>school</strong><small>学校教务 · 18张表</small></span>
+            <code>school123</code>
+          </button>
           <button type="button" @click="useMockAccount('admin', 'admin123')">
             <span class="account-icon admin">管</span>
             <span><strong>admin</strong><small>管理员 · 全部数据</small></span>
             <code>admin123</code>
-          </button>
-          <button type="button" @click="useMockAccount('growth', 'growth123')">
-            <span class="account-icon user">增</span>
-            <span><strong>growth</strong><small>用户增长 · 18张表</small></span>
-            <code>growth123</code>
-          </button>
-          <button type="button" @click="useMockAccount('channel', 'channel123')">
-            <span class="account-icon mock">渠</span>
-            <span><strong>channel</strong><small>渠道投放 · 16张表</small></span>
-            <code>channel123</code>
-          </button>
-          <button type="button" @click="useMockAccount('content', 'content123')">
-            <span class="account-icon mock">内</span>
-            <span><strong>content</strong><small>内容运营 · 19张表</small></span>
-            <code>content123</code>
           </button>
         </div>
         <small class="login-note">Mock 登录仅用于本地学习，不适合生产环境。</small>
@@ -509,8 +498,8 @@ function clarificationHint(result: QueryResult) {
   <div v-else class="app-layout">
     <aside class="history-sidebar" :class="{ open: leftOpen }">
       <div class="brand-row">
-        <span class="brand-symbol">A</span>
-        <div><strong>AskData</strong><small>AI 数据分析</small></div>
+        <span class="brand-symbol">E</span>
+        <div><strong>EduQuery</strong><small>AI 数据分析</small></div>
       </div>
 
       <button class="new-chat" :disabled="loading || !activeConversation?.turns.length" @click="createConversation"><span>＋</span>新建对话</button>
@@ -545,7 +534,7 @@ function clarificationHint(result: QueryResult) {
         <button class="mobile-menu" @click="leftOpen = !leftOpen">☰</button>
         <div>
           <strong>{{ activeConversation?.title ?? "新对话" }}</strong>
-          <span>自然语言问数</span>
+          <span>{{ authUser.role === 'academic_admin' ? '学校教学分析' : '自然语言问数' }}</span>
         </div>
         <button class="config-trigger" @click="rightOpen = !rightOpen">上下文设置</button>
         <span class="model-state"><i></i> 智能确认模式</span>
@@ -557,7 +546,7 @@ function clarificationHint(result: QueryResult) {
         <div v-if="!activeConversation?.turns.length && !loading" class="welcome-panel">
           <div class="welcome-copy">
             <span class="welcome-mark">✦</span>
-            <p class="kicker">ASKDATA STUDIO</p>
+            <p class="kicker">EduQuery</p>
             <h1>想从数据里了解什么？</h1>
             <p>查询结果会以清晰的表格卡片展示，并支持分页和Excel导出。</p>
             <div class="prompt-list">
@@ -576,10 +565,10 @@ function clarificationHint(result: QueryResult) {
             </div>
 
             <div class="assistant-message">
-              <div class="message-avatar assistant">A</div>
+              <div class="message-avatar assistant">E</div>
               <div class="message-body assistant-body">
                 <div class="answer-heading" :class="{ 'qa-heading': turn.result.route !== 'database_query' }">
-                  <div><small>AskData</small><strong v-if="turn.result.route === 'database_query'">{{ turn.result.status === "failed" ? "处理失败" : turn.result.status === "waiting_clarification" ? "需要补充信息" : "查询完成" }}</strong></div>
+                  <div><small>EduQuery</small><strong v-if="turn.result.route === 'database_query'">{{ turn.result.status === "failed" ? "处理失败" : turn.result.status === "waiting_clarification" ? "需要补充信息" : "查询完成" }}</strong></div>
                   <span v-if="turn.result.route === 'database_query' && turn.result.status === 'completed'">
                     {{ turn.result.workflow_mode === "single_database_agent" ? "单库智能体" : "多库流程" }}
                   </span>

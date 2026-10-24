@@ -1,0 +1,509 @@
+{
+  "metadata": {
+    "run_id": "school_20261019T134238Z",
+    "started_at_utc": "2026-10-19T13:42:38.404426+00:00",
+    "settings": {
+      "api_key_configured": true,
+      "llm_model": "qwen3.7-plus",
+      "llm_enable_thinking": false,
+      "embedding_model": "text-embedding-v4",
+      "embedding_dimensions": 1024,
+      "rerank_model": "qwen3-rerank",
+      "semantic_fallbacks": false,
+      "route_availability_fallback": "direct_response_no_database",
+      "schema_recall_threshold": 0.55,
+      "bm25_top_k": 30,
+      "dense_top_k": 30,
+      "rrf_top_k": 40,
+      "max_schema_fields": 20,
+      "max_saved_memories": 20,
+      "mcp_max_tool_calls": 3,
+      "short_term_memory": {
+        "summary_enabled": true,
+        "summary_trigger_tokens": 12000,
+        "summary_batch_tokens": 6000,
+        "min_recent_turns": 5,
+        "archive_enabled": false,
+        "table_row_limit": 50
+      },
+      "route_context_turns": 6
+    },
+    "workers": 1,
+    "fingerprints_before": {
+      "app\\__init__.py": "355b723e052e3e6c211f4cd922a2cccafd16836360ce633afbafdbf32bdd90ad",
+      "app\\api\\__init__.py": "e13d97d643b76827935fb88232e4012ce4161d82adffe01e040e48090b2887ea",
+      "app\\api\\routes.py": "3237efe75ad8141ca01d03b08e303c8bc30130f1dbeddd5f01e62e52087f893c",
+      "app\\config.py": "011d629eb18637259c55a1dd1b504c02adb0d2e6ea74a23871d216838af7dcb4",
+      "app\\database.py": "717828db86dcf2d56a80154788e8f5ac280ab18a7db3a2fa992563b2b1482bc2",
+      "app\\errors.py": "9b0161a00017954283b60ec0e1af69d02d45fc3c11b720ea226dc43625d3bce2",
+      "app\\main.py": "124643d441aa423af1f365bec3bc60442a55f078cb4142df4bb79e3d027179f6",
+      "app\\mcp_runtime\\__init__.py": "25afe0d37fd99611244cc7ff3e903cfa5c2dade31a15870e15269a609c6a7053",
+      "app\\mcp_runtime\\client.py": "549774b6d3b0b5d2903e56f538e61299a3c9a69abcb2be6c5c155f82d0d3e51d",
+      "app\\mcp_runtime\\schemas.py": "3f95a4d0eb62908fc12127c7ecd883e84affd1ac663972d874a8c5744c28070f",
+      "app\\mcp_runtime\\server.py": "3cb53028471a1e49b4e6e2a04217ee65ae561080ddd72f8278fc9dbd7984f39c",
+      "app\\mcp_runtime\\tools\\__init__.py": "b465bdc3de9e8878a59a8bd244b2e42fa03594e886d90ac5a6b218bf3892535f",
+      "app\\mcp_runtime\\tools\\database_tools.py": "d41c214b8e575b47345ffc7dad7885fd76ed45546849fc4e6487f82b3a3391ff",
+      "app\\mcp_runtime\\tools\\presentation_tools.py": "1524ab3baaf0ecca5e8df1b03e5682f6dd8bdfff37e3f2b64b7cf88aa9f19653",
+      "app\\mcp_runtime\\tools\\time_tools.py": "59a95659eafcc50f4c9ef2b2d1f783a04617e29018251fce64fb3af55d500974",
+      "app\\model_client.py": "f68cd0ced71c42e6e18464f86310aed22b71386f63f1160e49fad8bd02c92093",
+      "app\\models.py": "20a57eaf87b2e67524a5e36d3f3c553711b2dda3c5a469444b230afa40f30ae0",
+      "app\\preprocessing.py": "33cc8d3e011b78c8362448237dae5b12a4482ecab07b0545bf757fe5f3764a16",
+      "app\\querying\\__init__.py": "6dc948905075e824c2a2607ef66f9b842d53c013f2644bd78ed7551eac2c652c",
+      "app\\querying\\data_qa_agent.py": "59a3faf139e9da26e5fd373f20f1e2a85166363eea9b1c8e9888740ec49b6fe3",
+      "app\\querying\\duckdb_engine.py": "fc144b546ae12a1d366544667c5adcf578c7521d470a59b22082a26b99efaa08",
+      "app\\querying\\models.py": "bc72ddcce9cc7ac88891b3b5c2e56defacdd2c2207014b0d136970b60b9e2f60",
+      "app\\querying\\response_generator.py": "a6e6f3442527ffcb675357497330844ee516e9efb7213a526c1f761a2137a999",
+      "app\\querying\\single_database_agent.py": "04a8701c87bcf1b544fe1ad0018c35f43e587bf41b52e6aa231fe9e432a618b2",
+      "app\\retrieval\\__init__.py": "2e8edf1db4bec5d89d43de8b7303907d34dfa54f672f829a80122309192a1d1f",
+      "app\\retrieval\\graph.py": "01a2672d56e1c140fca615bdd400a45037d8998eddd63d0de20bef95f4c103b4",
+      "app\\retrieval\\service.py": "213b0af75edd4a2e8797191752374b69efd3d97a1ed3955be4265953e2932929",
+      "app\\retrieval\\store.py": "04b67be05158e1acc77a4e64a3993765e415d3d2ccd419e06bb5662d81317cfe",
+      "app\\security\\__init__.py": "f64ea4a1b53332090130642c17e6265aa4df9019634fc075448b25f3ba4e94a6",
+      "app\\security\\access_control.py": "dd0396dc20bc6de89b090fa7ec6c4d2e081129c363c63bd6a94069c5692e32bb",
+      "app\\security\\auth.py": "bf0b860aba41ead4258f3abc744460023f1fd66a2cd9637be18b78b12845e128",
+      "app\\service.py": "3961513ad9e067f749d6bb4aa7bcb5d680219bb564baa06fcfa6b0d5a6516296",
+      "app\\services\\__init__.py": "020f361755c5bedb3b0b82e4d1458b862c7b8f3d2073d0a87325f2772220de0c",
+      "app\\services\\askdata_service.py": "3d5c56744e1f4d9f3a09c77eef4ae3934576af7588ff12f2fabc42194082b9cc",
+      "app\\services\\memory_store.py": "d4ed8600af12b383a459aeebf4c40d74ef99209da3fff8d611865a9b36b6cb14",
+      "app\\services\\session_archive.py": "008336024d456a019341dcebaefbc7527adbcd8aa9d351a49914225d07951b51",
+      "app\\services\\session_context.py": "3c36ddde9b3faa3b18a90cec8850ce2dfd8cac14a0df9c4584108315b0e829b9",
+      "app\\services\\short_term_memory.py": "bfbc81597254e58f8303b81e53ebcd24a244fc4d6cd7053c1d5cabe8ad48299f",
+      "app\\skills\\__init__.py": "680726c976c87e1e888df0697b232234722401e1d1b02636949f18afab163949",
+      "app\\skills\\data_qa\\SKILL.md": "182fe30eab4cce01b99b457a4a50027de5a56fdb00f587af3fd431d44248f196",
+      "app\\skills\\database_query\\SKILL.md": "67aed44fe075ea8faeab7b51f14f5f936afbae186a7619aa204a8a1937dff178",
+      "app\\skills\\registry.py": "b1578a6829402fd103be8b40920d8fff682694ed4c4fd986935b6c8b6eb37f53",
+      "app\\workflows\\__init__.py": "3da3f98de22b4df4c01d7082562b1decac29704d80539cc9e7a8e4f9378ae397",
+      "app\\workflows\\query_graph.py": "2f2235aa65b5af3bbafefc540a8910d433e01a9fc07795f13894418f04954913",
+      "app\\workflows\\result_builder.py": "5940cb68ae0ad8c402cf71c774f8f5a932f7b3993560c897e9c8bc4b11ebed53",
+      "app\\workflows\\state.py": "1434ed02a6800e3cd4e1ac91bcffd30235443e3eca6ac3ff913388a7be738dcb",
+      "data\\databases\\school_teaching\\_schema.json": "31a7c86092e4f5e7042e4b25d1483c56515ca6b12baa4322f21586c536973f0a",
+      "data\\databases\\school_teaching\\academic_calendar.csv": "9acd0e14fff861cc23fee6f30243eb6d36296bdb64d55bf2dfbc5e12842e1b3d",
+      "data\\databases\\school_teaching\\assignment_submissions.csv": "7c6176e3981aa2af0ef5f072daa6c46be397c50a3e3f7915b31ce271439e2eba",
+      "data\\databases\\school_teaching\\assignments.csv": "8a2c86bd89c3b16087350a51ae41c79f993e3f46997ae0909072041b2076edda",
+      "data\\databases\\school_teaching\\attendance.csv": "6cd12cef95894eb39897a8637e29cc84e88f1158bcd6bf2fa4477c3e40c1e46e",
+      "data\\databases\\school_teaching\\classes.csv": "64c5b02a05d309fe14bdaaf9d4c1d24424383888203626975d7f0cd6f5325f45",
+      "data\\databases\\school_teaching\\enrollments.csv": "e2df9c38c62218edbeadcef54fce16d17465b430a68d40e3e594114bfbedc975",
+      "data\\databases\\school_teaching\\exam_questions.csv": "e561ce0f353b5b45f2100da6dc80740d90836168c0aeb854e0e8563ca390aaba",
+      "data\\databases\\school_teaching\\exam_results.csv": "d147dc9674fa887cd82b75f3eac871051c51ec195f209fb1b1e832be4d969a12",
+      "data\\databases\\school_teaching\\exams.csv": "0a74ac1f75c8eabd737c3dfc698e2c4e07b4515c3ed77d4f7a6f470535118b2b",
+      "data\\databases\\school_teaching\\knowledge_points.csv": "5d9c7b2a7b3b56c132458c2ebf78bbd695555025577beeb3dee2877e27074dc7",
+      "data\\databases\\school_teaching\\lessons.csv": "57e834f21e84ddb49b8bbd57023784602d90eb12bb870d0af51a9bff9589788d",
+      "data\\databases\\school_teaching\\question_responses.csv": "bf2db5619ec54b2765651f190ac92b5a7001ee9d222856332a2e81884260e842",
+      "data\\databases\\school_teaching\\schools.csv": "c4b5ad80c5df7f0aae220223552c535b77ea302cf4c89d04499c16bfc932bd68",
+      "data\\databases\\school_teaching\\students.csv": "23dd5bb9771dec88fb1446a7a794226ec2680925c7d3075dc1762f676412bf7d",
+      "data\\databases\\school_teaching\\subjects.csv": "7d612384f2befa895d95779cf942eb708d93d199142b607915f01292da37c817",
+      "data\\databases\\school_teaching\\teachers.csv": "d2a0d21ce20f850ba28e6e9b7b5c9862f76d395b2e15b84f13bcd2712c62b194",
+      "data\\databases\\school_teaching\\teaching_assignments.csv": "276833bc00c301c36dc31501a88656b2b0c80936bae3e3cbd3fa70468bf92cf7",
+      "data\\databases\\school_teaching\\terms.csv": "f8c3ed59664a3eb3fa1a9c7403426bc93a1eed403340cc37f9359197034bf0f4",
+      "data\\schema_store.json": "a2db8f12118fcde1debe72ebdb9df658a724c1bdae9ccbc9b910007f8f4b8a1a",
+      "evaluation\\run_school_benchmark.py": "46b39de2d14cad7bfcf2dfb22c78085e899bff78b2d9ea165e6468786870f020",
+      "evaluation\\school_cases.py": "8cb2977468f5ae442759387587b3fbe949017d5217870a0eddfbd8c52c6acb14"
+    },
+    "case_sha256": "383986f3f59e30f8d3dd0c5cd893d526e5e005f67c17a82ea7eed6b3c6142c53",
+    "finished_at_utc": "2026-10-19T13:43:00.483734+00:00",
+    "fingerprints_after": {
+      "app\\__init__.py": "355b723e052e3e6c211f4cd922a2cccafd16836360ce633afbafdbf32bdd90ad",
+      "app\\api\\__init__.py": "e13d97d643b76827935fb88232e4012ce4161d82adffe01e040e48090b2887ea",
+      "app\\api\\routes.py": "3237efe75ad8141ca01d03b08e303c8bc30130f1dbeddd5f01e62e52087f893c",
+      "app\\config.py": "011d629eb18637259c55a1dd1b504c02adb0d2e6ea74a23871d216838af7dcb4",
+      "app\\database.py": "717828db86dcf2d56a80154788e8f5ac280ab18a7db3a2fa992563b2b1482bc2",
+      "app\\errors.py": "9b0161a00017954283b60ec0e1af69d02d45fc3c11b720ea226dc43625d3bce2",
+      "app\\main.py": "124643d441aa423af1f365bec3bc60442a55f078cb4142df4bb79e3d027179f6",
+      "app\\mcp_runtime\\__init__.py": "25afe0d37fd99611244cc7ff3e903cfa5c2dade31a15870e15269a609c6a7053",
+      "app\\mcp_runtime\\client.py": "549774b6d3b0b5d2903e56f538e61299a3c9a69abcb2be6c5c155f82d0d3e51d",
+      "app\\mcp_runtime\\schemas.py": "3f95a4d0eb62908fc12127c7ecd883e84affd1ac663972d874a8c5744c28070f",
+      "app\\mcp_runtime\\server.py": "3cb53028471a1e49b4e6e2a04217ee65ae561080ddd72f8278fc9dbd7984f39c",
+      "app\\mcp_runtime\\tools\\__init__.py": "b465bdc3de9e8878a59a8bd244b2e42fa03594e886d90ac5a6b218bf3892535f",
+      "app\\mcp_runtime\\tools\\database_tools.py": "d41c214b8e575b47345ffc7dad7885fd76ed45546849fc4e6487f82b3a3391ff",
+      "app\\mcp_runtime\\tools\\presentation_tools.py": "1524ab3baaf0ecca5e8df1b03e5682f6dd8bdfff37e3f2b64b7cf88aa9f19653",
+      "app\\mcp_runtime\\tools\\time_tools.py": "59a95659eafcc50f4c9ef2b2d1f783a04617e29018251fce64fb3af55d500974",
+      "app\\model_client.py": "f68cd0ced71c42e6e18464f86310aed22b71386f63f1160e49fad8bd02c92093",
+      "app\\models.py": "20a57eaf87b2e67524a5e36d3f3c553711b2dda3c5a469444b230afa40f30ae0",
+      "app\\preprocessing.py": "33cc8d3e011b78c8362448237dae5b12a4482ecab07b0545bf757fe5f3764a16",
+      "app\\querying\\__init__.py": "6dc948905075e824c2a2607ef66f9b842d53c013f2644bd78ed7551eac2c652c",
+      "app\\querying\\data_qa_agent.py": "59a3faf139e9da26e5fd373f20f1e2a85166363eea9b1c8e9888740ec49b6fe3",
+      "app\\querying\\duckdb_engine.py": "fc144b546ae12a1d366544667c5adcf578c7521d470a59b22082a26b99efaa08",
+      "app\\querying\\models.py": "bc72ddcce9cc7ac88891b3b5c2e56defacdd2c2207014b0d136970b60b9e2f60",
+      "app\\querying\\response_generator.py": "a6e6f3442527ffcb675357497330844ee516e9efb7213a526c1f761a2137a999",
+      "app\\querying\\single_database_agent.py": "04a8701c87bcf1b544fe1ad0018c35f43e587bf41b52e6aa231fe9e432a618b2",
+      "app\\retrieval\\__init__.py": "2e8edf1db4bec5d89d43de8b7303907d34dfa54f672f829a80122309192a1d1f",
+      "app\\retrieval\\graph.py": "01a2672d56e1c140fca615bdd400a45037d8998eddd63d0de20bef95f4c103b4",
+      "app\\retrieval\\service.py": "213b0af75edd4a2e8797191752374b69efd3d97a1ed3955be4265953e2932929",
+      "app\\retrieval\\store.py": "04b67be05158e1acc77a4e64a3993765e415d3d2ccd419e06bb5662d81317cfe",
+      "app\\security\\__init__.py": "f64ea4a1b53332090130642c17e6265aa4df9019634fc075448b25f3ba4e94a6",
+      "app\\security\\access_control.py": "dd0396dc20bc6de89b090fa7ec6c4d2e081129c363c63bd6a94069c5692e32bb",
+      "app\\security\\auth.py": "bf0b860aba41ead4258f3abc744460023f1fd66a2cd9637be18b78b12845e128",
+      "app\\service.py": "3961513ad9e067f749d6bb4aa7bcb5d680219bb564baa06fcfa6b0d5a6516296",
+      "app\\services\\__init__.py": "020f361755c5bedb3b0b82e4d1458b862c7b8f3d2073d0a87325f2772220de0c",
+      "app\\services\\askdata_service.py": "3d5c56744e1f4d9f3a09c77eef4ae3934576af7588ff12f2fabc42194082b9cc",
+      "app\\services\\memory_store.py": "d4ed8600af12b383a459aeebf4c40d74ef99209da3fff8d611865a9b36b6cb14",
+      "app\\services\\session_archive.py": "008336024d456a019341dcebaefbc7527adbcd8aa9d351a49914225d07951b51",
+      "app\\services\\session_context.py": "3c36ddde9b3faa3b18a90cec8850ce2dfd8cac14a0df9c4584108315b0e829b9",
+      "app\\services\\short_term_memory.py": "bfbc81597254e58f8303b81e53ebcd24a244fc4d6cd7053c1d5cabe8ad48299f",
+      "app\\skills\\__init__.py": "680726c976c87e1e888df0697b232234722401e1d1b02636949f18afab163949",
+      "app\\skills\\data_qa\\SKILL.md": "182fe30eab4cce01b99b457a4a50027de5a56fdb00f587af3fd431d44248f196",
+      "app\\skills\\database_query\\SKILL.md": "67aed44fe075ea8faeab7b51f14f5f936afbae186a7619aa204a8a1937dff178",
+      "app\\skills\\registry.py": "b1578a6829402fd103be8b40920d8fff682694ed4c4fd986935b6c8b6eb37f53",
+      "app\\workflows\\__init__.py": "3da3f98de22b4df4c01d7082562b1decac29704d80539cc9e7a8e4f9378ae397",
+      "app\\workflows\\query_graph.py": "2f2235aa65b5af3bbafefc540a8910d433e01a9fc07795f13894418f04954913",
+      "app\\workflows\\result_builder.py": "5940cb68ae0ad8c402cf71c774f8f5a932f7b3993560c897e9c8bc4b11ebed53",
+      "app\\workflows\\state.py": "1434ed02a6800e3cd4e1ac91bcffd30235443e3eca6ac3ff913388a7be738dcb",
+      "data\\databases\\school_teaching\\_schema.json": "31a7c86092e4f5e7042e4b25d1483c56515ca6b12baa4322f21586c536973f0a",
+      "data\\databases\\school_teaching\\academic_calendar.csv": "9acd0e14fff861cc23fee6f30243eb6d36296bdb64d55bf2dfbc5e12842e1b3d",
+      "data\\databases\\school_teaching\\assignment_submissions.csv": "7c6176e3981aa2af0ef5f072daa6c46be397c50a3e3f7915b31ce271439e2eba",
+      "data\\databases\\school_teaching\\assignments.csv": "8a2c86bd89c3b16087350a51ae41c79f993e3f46997ae0909072041b2076edda",
+      "data\\databases\\school_teaching\\attendance.csv": "6cd12cef95894eb39897a8637e29cc84e88f1158bcd6bf2fa4477c3e40c1e46e",
+      "data\\databases\\school_teaching\\classes.csv": "64c5b02a05d309fe14bdaaf9d4c1d24424383888203626975d7f0cd6f5325f45",
+      "data\\databases\\school_teaching\\enrollments.csv": "e2df9c38c62218edbeadcef54fce16d17465b430a68d40e3e594114bfbedc975",
+      "data\\databases\\school_teaching\\exam_questions.csv": "e561ce0f353b5b45f2100da6dc80740d90836168c0aeb854e0e8563ca390aaba",
+      "data\\databases\\school_teaching\\exam_results.csv": "d147dc9674fa887cd82b75f3eac871051c51ec195f209fb1b1e832be4d969a12",
+      "data\\databases\\school_teaching\\exams.csv": "0a74ac1f75c8eabd737c3dfc698e2c4e07b4515c3ed77d4f7a6f470535118b2b",
+      "data\\databases\\school_teaching\\knowledge_points.csv": "5d9c7b2a7b3b56c132458c2ebf78bbd695555025577beeb3dee2877e27074dc7",
+      "data\\databases\\school_teaching\\lessons.csv": "57e834f21e84ddb49b8bbd57023784602d90eb12bb870d0af51a9bff9589788d",
+      "data\\databases\\school_teaching\\question_responses.csv": "bf2db5619ec54b2765651f190ac92b5a7001ee9d222856332a2e81884260e842",
+      "data\\databases\\school_teaching\\schools.csv": "c4b5ad80c5df7f0aae220223552c535b77ea302cf4c89d04499c16bfc932bd68",
+      "data\\databases\\school_teaching\\students.csv": "23dd5bb9771dec88fb1446a7a794226ec2680925c7d3075dc1762f676412bf7d",
+      "data\\databases\\school_teaching\\subjects.csv": "7d612384f2befa895d95779cf942eb708d93d199142b607915f01292da37c817",
+      "data\\databases\\school_teaching\\teachers.csv": "d2a0d21ce20f850ba28e6e9b7b5c9862f76d395b2e15b84f13bcd2712c62b194",
+      "data\\databases\\school_teaching\\teaching_assignments.csv": "276833bc00c301c36dc31501a88656b2b0c80936bae3e3cbd3fa70468bf92cf7",
+      "data\\databases\\school_teaching\\terms.csv": "f8c3ed59664a3eb3fa1a9c7403426bc93a1eed403340cc37f9359197034bf0f4",
+      "data\\schema_store.json": "a2db8f12118fcde1debe72ebdb9df658a724c1bdae9ccbc9b910007f8f4b8a1a",
+      "evaluation\\run_school_benchmark.py": "46b39de2d14cad7bfcf2dfb22c78085e899bff78b2d9ea165e6468786870f020",
+      "evaluation\\school_cases.py": "8cb2977468f5ae442759387587b3fbe949017d5217870a0eddfbd8c52c6acb14"
+    },
+    "application_and_data_unchanged": true
+  },
+  "complete": true,
+  "summary": {
+    "case_count": 1,
+    "gold_field_count": 11,
+    "recalled_field_count": 7,
+    "schema_recall_micro": 0.6363636363636364,
+    "schema_recall_macro": 0.6363636363636364,
+    "expanded_recall_micro": 0.7272727272727273,
+    "retrieval_completed": 1,
+    "sql_success_count": 1,
+    "sql_execution_success_rate": 1.0,
+    "first_sql_success_count": 1,
+    "correct_count": 1,
+    "result_accuracy": 1.0,
+    "result_accuracy_given_executed_sql": 1.0,
+    "response_status_counts": {
+      "completed": 1
+    },
+    "exception_count": 0,
+    "mean_seconds": 21.958
+  },
+  "by_category": {
+    "成绩": {
+      "case_count": 1,
+      "gold_field_count": 11,
+      "recalled_field_count": 7,
+      "schema_recall_micro": 0.6363636363636364,
+      "schema_recall_macro": 0.6363636363636364,
+      "expanded_recall_micro": 0.7272727272727273,
+      "retrieval_completed": 1,
+      "sql_success_count": 1,
+      "sql_execution_success_rate": 1.0,
+      "first_sql_success_count": 1,
+      "correct_count": 1,
+      "result_accuracy": 1.0,
+      "result_accuracy_given_executed_sql": 1.0,
+      "response_status_counts": {
+        "completed": 1
+      },
+      "exception_count": 0,
+      "mean_seconds": 21.958
+    }
+  },
+  "cases": [
+    {
+      "case_id": "EDU-001",
+      "category": "成绩",
+      "difficulty": "medium",
+      "query": "八年级期中数学各班平均分是多少？输出班级名称、平均分，按原始满分计，排除缺考。",
+      "gold_sql": "SELECT c.class_name AS 班级名称, AVG(r.score) AS 平均分 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id\nJOIN enrollments e ON r.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE x.grade=8 AND x.exam_type='midterm' AND x.subject_id='MAT' GROUP BY 1",
+      "columns": [
+        {
+          "name": "班级名称",
+          "aliases": [
+            "班级名称",
+            "class_name"
+          ],
+          "kind": "text"
+        },
+        {
+          "name": "平均分",
+          "aliases": [
+            "平均分",
+            "average_score"
+          ],
+          "kind": "score"
+        }
+      ],
+      "order_sensitive": false,
+      "gold_fields": [
+        "school_teaching.classes.class_id",
+        "school_teaching.classes.class_name",
+        "school_teaching.enrollments.class_id",
+        "school_teaching.enrollments.enrollment_id",
+        "school_teaching.exam_results.enrollment_id",
+        "school_teaching.exam_results.exam_id",
+        "school_teaching.exam_results.score",
+        "school_teaching.exams.exam_id",
+        "school_teaching.exams.exam_type",
+        "school_teaching.exams.grade",
+        "school_teaching.exams.subject_id"
+      ],
+      "expected_rows": [
+        {
+          "班级名称": "八年级1班",
+          "平均分": 77.94186046511628
+        },
+        {
+          "班级名称": "八年级5班",
+          "平均分": 81.09302325581395
+        },
+        {
+          "班级名称": "八年级4班",
+          "平均分": 79.23809523809524
+        },
+        {
+          "班级名称": "八年级2班",
+          "平均分": 80.7560975609756
+        },
+        {
+          "班级名称": "八年级3班",
+          "平均分": 75.8076923076923
+        },
+        {
+          "班级名称": "八年级6班",
+          "平均分": 83.17857142857143
+        }
+      ],
+      "retrieved_fields": [
+        "school_teaching.classes.class_id",
+        "school_teaching.classes.class_name",
+        "school_teaching.classes.grade",
+        "school_teaching.classes.school_id",
+        "school_teaching.enrollments.class_id",
+        "school_teaching.enrollments.student_id",
+        "school_teaching.exam_results.enrollment_id",
+        "school_teaching.exam_results.score",
+        "school_teaching.exams.exam_name",
+        "school_teaching.exams.grade",
+        "school_teaching.exams.max_score",
+        "school_teaching.exams.subject_id",
+        "school_teaching.knowledge_points.grade",
+        "school_teaching.question_responses.result_id",
+        "school_teaching.teaching_assignments.class_id"
+      ],
+      "expanded_fields": [
+        "school_teaching.classes.class_id",
+        "school_teaching.classes.class_name",
+        "school_teaching.classes.grade",
+        "school_teaching.classes.school_id",
+        "school_teaching.classes.term_id",
+        "school_teaching.enrollments.class_id",
+        "school_teaching.enrollments.enrollment_id",
+        "school_teaching.enrollments.student_id",
+        "school_teaching.exam_results.enrollment_id",
+        "school_teaching.exam_results.result_id",
+        "school_teaching.exam_results.score",
+        "school_teaching.exams.exam_name",
+        "school_teaching.exams.grade",
+        "school_teaching.exams.max_score",
+        "school_teaching.exams.subject_id",
+        "school_teaching.exams.term_id",
+        "school_teaching.knowledge_points.grade",
+        "school_teaching.knowledge_points.subject_id",
+        "school_teaching.question_responses.result_id",
+        "school_teaching.subjects.subject_id",
+        "school_teaching.teaching_assignments.class_id",
+        "school_teaching.teaching_assignments.subject_id",
+        "school_teaching.terms.term_id"
+      ],
+      "missing_fields": [
+        "school_teaching.enrollments.enrollment_id",
+        "school_teaching.exam_results.exam_id",
+        "school_teaching.exams.exam_id",
+        "school_teaching.exams.exam_type"
+      ],
+      "true_positive": 7,
+      "expanded_true_positive": 8,
+      "schema_recall": 0.6363636363636364,
+      "expanded_recall": 0.7272727272727273,
+      "retrieval_completed": true,
+      "extraction": {
+        "retrieval_terms": [
+          "八年级",
+          "期中考试",
+          "数学",
+          "班级",
+          "平均分"
+        ],
+        "metrics": [
+          "平均分"
+        ],
+        "dimensions": [
+          "班级名称"
+        ],
+        "filters": [
+          "年级=八年级",
+          "科目=数学",
+          "考试类型=期中",
+          "状态!=缺考"
+        ],
+        "time_expressions": [],
+        "operations": [
+          "AVG",
+          "GROUP BY"
+        ]
+      },
+      "intent": {
+        "action": "database_query",
+        "confidence": 0.95,
+        "reason": "用户明确请求查询特定年级、科目、考试类型的平均分数据，并指定了输出字段、计算规则和过滤条件，属于典型的数据库查询意图。",
+        "response_type": "answer",
+        "source": "model"
+      },
+      "generated_sql": "SELECT \n  c.class_name AS \"班级名称\",\n  ROUND(AVG(er.score), 2) AS \"平均分\"\nFROM exam_results er\nJOIN enrollments e ON er.enrollment_id = e.enrollment_id\nJOIN classes c ON e.class_id = c.class_id\nJOIN exams ex ON er.exam_id = ex.exam_id\nJOIN subjects s ON ex.subject_id = s.subject_id\nWHERE ex.grade = 8\n  AND ex.exam_type = 'midterm'\n  AND s.subject_name = '数学'\n  AND er.exam_status = 'attended'\nGROUP BY c.class_name\nORDER BY c.class_name",
+      "sql_execution_success": true,
+      "first_sql_execution_success": true,
+      "sql_attempt_count": 1,
+      "result_correct": true,
+      "comparison_reason": "结果一致",
+      "actual_columns": [
+        "班级名称",
+        "平均分"
+      ],
+      "actual_rows": [
+        {
+          "班级名称": "八年级1班",
+          "平均分": 77.94
+        },
+        {
+          "班级名称": "八年级2班",
+          "平均分": 80.76
+        },
+        {
+          "班级名称": "八年级3班",
+          "平均分": 75.81
+        },
+        {
+          "班级名称": "八年级4班",
+          "平均分": 79.24
+        },
+        {
+          "班级名称": "八年级5班",
+          "平均分": 81.09
+        },
+        {
+          "班级名称": "八年级6班",
+          "平均分": 83.18
+        }
+      ],
+      "tool_trace": [
+        {
+          "call_index": 1,
+          "tool": "query_school_teaching",
+          "arguments": {
+            "sql": "SELECT \n  c.class_name AS \"班级名称\",\n  ROUND(AVG(er.score), 2) AS \"平均分\"\nFROM exam_results er\nJOIN enrollments e ON er.enrollment_id = e.enrollment_id\nJOIN classes c ON e.class_id = c.class_id\nJOIN exams ex ON er.exam_id = ex.exam_id\nJOIN subjects s ON ex.subject_id = s.subject_id\nWHERE ex.grade = 8\n  AND ex.exam_type = 'midterm'\n  AND s.subject_name = '数学'\n  AND er.exam_status = 'attended'\nGROUP BY c.class_name\nORDER BY c.class_name"
+          },
+          "query_contract": {
+            "grain": "分组汇总",
+            "source_tables": [
+              "exam_results",
+              "enrollments",
+              "classes",
+              "exams",
+              "subjects"
+            ],
+            "filters": [
+              {
+                "phrase": "八年级",
+                "field": "exams.grade",
+                "operator": "=",
+                "value": 8
+              },
+              {
+                "phrase": "期中",
+                "field": "exams.exam_type",
+                "operator": "=",
+                "value": "midterm"
+              },
+              {
+                "phrase": "数学",
+                "field": "subjects.subject_name",
+                "operator": "=",
+                "value": "数学"
+              },
+              {
+                "phrase": "排除缺考学生",
+                "field": "exam_results.exam_status",
+                "operator": "=",
+                "value": "attended"
+              }
+            ],
+            "metrics": [
+              "AVG(exam_results.score)"
+            ],
+            "output_columns": [
+              "班级名称",
+              "平均分"
+            ]
+          },
+          "result": {
+            "database": "school_teaching",
+            "sql": "SELECT \n  c.class_name AS \"班级名称\",\n  ROUND(AVG(er.score), 2) AS \"平均分\"\nFROM exam_results er\nJOIN enrollments e ON er.enrollment_id = e.enrollment_id\nJOIN classes c ON e.class_id = c.class_id\nJOIN exams ex ON er.exam_id = ex.exam_id\nJOIN subjects s ON ex.subject_id = s.subject_id\nWHERE ex.grade = 8\n  AND ex.exam_type = 'midterm'\n  AND s.subject_name = '数学'\n  AND er.exam_status = 'attended'\nGROUP BY c.class_name\nORDER BY c.class_name",
+            "success": true,
+            "columns": [
+              "班级名称",
+              "平均分"
+            ],
+            "rows": [
+              {
+                "班级名称": "八年级1班",
+                "平均分": 77.94
+              },
+              {
+                "班级名称": "八年级2班",
+                "平均分": 80.76
+              },
+              {
+                "班级名称": "八年级3班",
+                "平均分": 75.81
+              },
+              {
+                "班级名称": "八年级4班",
+                "平均分": 79.24
+              },
+              {
+                "班级名称": "八年级5班",
+                "平均分": 81.09
+              },
+              {
+                "班级名称": "八年级6班",
+                "平均分": 83.18
+              }
+            ],
+            "row_count": 6,
+            "execution_ms": 1238.149,
+            "error": null
+          },
+          "reason": "根据查询契约生成并执行只读SQL"
+        }
+      ],
+      "response_status": "completed",
+      "clarification": null,
+      "error": "",
+      "elapsed_seconds": 21.958,
+      "model_metrics": {
+        "model_request_attempt_count": 5,
+        "model_retry_count": 0,
+        "model_timeout_event_count": 0,
+        "model_connection_error_event_count": 0
+      }
+    }
+  ]
+}

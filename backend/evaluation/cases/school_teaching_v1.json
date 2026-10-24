@@ -1,0 +1,2865 @@
+[
+  {
+    "case_id": "EDU-001",
+    "category": "成绩",
+    "difficulty": "medium",
+    "query": "八年级期中数学各班平均分是多少？输出班级名称、平均分，按原始满分计，排除缺考。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, AVG(r.score) AS 平均分 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id\nJOIN enrollments e ON r.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE x.grade=8 AND x.exam_type='midterm' AND x.subject_id='MAT' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "平均分",
+        "aliases": [
+          "平均分",
+          "average_score"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.exam_results.enrollment_id",
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.score",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级5班",
+        "平均分": 81.09302325581395
+      },
+      {
+        "班级名称": "八年级2班",
+        "平均分": 80.7560975609756
+      },
+      {
+        "班级名称": "八年级3班",
+        "平均分": 75.8076923076923
+      },
+      {
+        "班级名称": "八年级6班",
+        "平均分": 83.17857142857143
+      },
+      {
+        "班级名称": "八年级4班",
+        "平均分": 79.23809523809524
+      },
+      {
+        "班级名称": "八年级1班",
+        "平均分": 77.94186046511628
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-002",
+    "category": "成绩",
+    "difficulty": "medium",
+    "query": "七年级期末英语各班及格率是多少？输出班级名称、及格率，及格线为满分的60%，分母为实考人数，比率用0到1。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(*) FILTER(WHERE r.score/x.max_score>=0.6)*1.0/COUNT(r.score) AS 及格率 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id\nJOIN enrollments e ON r.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE x.grade=7 AND x.exam_type='final' AND x.subject_id='ENG' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "及格率",
+        "aliases": [
+          "及格率",
+          "pass_rate"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.exam_results.enrollment_id",
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.score",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.max_score",
+      "school_teaching.exams.subject_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "七年级3班",
+        "及格率": 0.627906976744186
+      },
+      {
+        "班级名称": "七年级1班",
+        "及格率": 0.7142857142857143
+      },
+      {
+        "班级名称": "七年级4班",
+        "及格率": 0.8043478260869565
+      },
+      {
+        "班级名称": "七年级5班",
+        "及格率": 0.8837209302325582
+      },
+      {
+        "班级名称": "七年级2班",
+        "及格率": 0.6744186046511628
+      },
+      {
+        "班级名称": "七年级6班",
+        "及格率": 0.8048780487804879
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-003",
+    "category": "成绩",
+    "difficulty": "medium",
+    "query": "各年级期中考试缺考记录有多少条？输出年级、缺考人次。",
+    "gold_sql": "SELECT x.grade AS 年级, COUNT(r.result_id) AS 缺考人次 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id WHERE x.exam_type='midterm' AND r.exam_status='absent' GROUP BY 1",
+    "columns": [
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "缺考人次",
+        "aliases": [
+          "缺考人次",
+          "absent_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.exam_status",
+      "school_teaching.exam_results.result_id",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade"
+    ],
+    "expected_rows": [
+      {
+        "年级": 9,
+        "缺考人次": 86
+      },
+      {
+        "年级": 8,
+        "缺考人次": 71
+      },
+      {
+        "年级": 7,
+        "缺考人次": 44
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-004",
+    "category": "成绩",
+    "difficulty": "hard",
+    "query": "九年级期末物理原始成绩最高的前5名是谁？输出学号、姓名、成绩；成绩降序，同分按学号升序。排除缺考。",
+    "gold_sql": "SELECT s.student_id AS 学号, s.student_name AS 姓名, r.score AS 成绩 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id\nJOIN enrollments e ON r.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id JOIN students s ON e.student_id=s.student_id WHERE x.grade=9 AND x.exam_type='final' AND x.subject_id='PHY' AND r.score IS NOT NULL ORDER BY r.score DESC,s.student_id LIMIT 5",
+    "columns": [
+      {
+        "name": "学号",
+        "aliases": [
+          "学号",
+          "student_id"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "姓名",
+        "aliases": [
+          "姓名",
+          "student_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "成绩",
+        "aliases": [
+          "成绩",
+          "score"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": true,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.enrollments.student_id",
+      "school_teaching.exam_results.enrollment_id",
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.score",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.students.student_id",
+      "school_teaching.students.student_name"
+    ],
+    "expected_rows": [
+      {
+        "学号": "S00741",
+        "姓名": "朱浩然",
+        "成绩": 98.5
+      },
+      {
+        "学号": "S00773",
+        "姓名": "金宇航",
+        "成绩": 97.0
+      },
+      {
+        "学号": "S00531",
+        "姓名": "韩博文",
+        "成绩": 95.5
+      },
+      {
+        "学号": "S00649",
+        "姓名": "曹雨桐",
+        "成绩": 95.5
+      },
+      {
+        "学号": "S00660",
+        "姓名": "杨梓萱",
+        "成绩": 94.5
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-005",
+    "category": "成绩",
+    "difficulty": "medium",
+    "query": "八年级期末各学科平均得分率是多少？输出学科名称、平均得分率，先算每个实考学生的成绩除以该考试满分，再求平均，用0到1。",
+    "gold_sql": "SELECT s.subject_name AS 学科名称, AVG(r.score/x.max_score) AS 平均得分率 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id JOIN subjects s ON x.subject_id=s.subject_id WHERE x.grade=8 AND x.exam_type='final' GROUP BY 1",
+    "columns": [
+      {
+        "name": "学科名称",
+        "aliases": [
+          "学科名称",
+          "subject_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "平均得分率",
+        "aliases": [
+          "平均得分率",
+          "average_score_ratio"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.score",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.max_score",
+      "school_teaching.exams.subject_id",
+      "school_teaching.subjects.subject_id",
+      "school_teaching.subjects.subject_name"
+    ],
+    "expected_rows": [
+      {
+        "学科名称": "历史",
+        "平均得分率": 0.701732283464567
+      },
+      {
+        "学科名称": "生物",
+        "平均得分率": 0.6942292490118575
+      },
+      {
+        "学科名称": "道德与法治",
+        "平均得分率": 0.6874015748031491
+      },
+      {
+        "学科名称": "地理",
+        "平均得分率": 0.757165354330709
+      },
+      {
+        "学科名称": "语文",
+        "平均得分率": 0.682107843137255
+      },
+      {
+        "学科名称": "数学",
+        "平均得分率": 0.7093790849673198
+      },
+      {
+        "学科名称": "物理",
+        "平均得分率": 0.672707509881423
+      },
+      {
+        "学科名称": "英语",
+        "平均得分率": 0.7011601307189541
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-006",
+    "category": "成绩",
+    "difficulty": "hard",
+    "query": "八年级各班数学从期中到期末平均原始分提高了多少？输出班级名称、期中平均分、期末平均分、提升分数；各次考试分别排除缺考。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, AVG(r.score) FILTER(WHERE x.exam_type='midterm') AS 期中平均分, AVG(r.score) FILTER(WHERE x.exam_type='final') AS 期末平均分, AVG(r.score) FILTER(WHERE x.exam_type='final')-AVG(r.score) FILTER(WHERE x.exam_type='midterm') AS 提升分数 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id\nJOIN enrollments e ON r.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE x.grade=8 AND x.subject_id='MAT' AND x.exam_type IN ('midterm','final') GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "期中平均分",
+        "aliases": [
+          "期中平均分",
+          "midterm_average"
+        ],
+        "kind": "score"
+      },
+      {
+        "name": "期末平均分",
+        "aliases": [
+          "期末平均分",
+          "final_average"
+        ],
+        "kind": "score"
+      },
+      {
+        "name": "提升分数",
+        "aliases": [
+          "提升分数",
+          "improvement"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.exam_results.enrollment_id",
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.score",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级5班",
+        "期中平均分": 81.09302325581395,
+        "期末平均分": 85.23863636363636,
+        "提升分数": 4.145613107822413
+      },
+      {
+        "班级名称": "八年级1班",
+        "期中平均分": 77.94186046511628,
+        "期末平均分": 85.20930232558139,
+        "提升分数": 7.267441860465112
+      },
+      {
+        "班级名称": "八年级4班",
+        "期中平均分": 79.23809523809524,
+        "期末平均分": 83.98809523809524,
+        "提升分数": 4.75
+      },
+      {
+        "班级名称": "八年级2班",
+        "期中平均分": 80.7560975609756,
+        "期末平均分": 84.29069767441861,
+        "提升分数": 3.5346001134430054
+      },
+      {
+        "班级名称": "八年级3班",
+        "期中平均分": 75.8076923076923,
+        "期末平均分": 81.2375,
+        "提升分数": 5.429807692307691
+      },
+      {
+        "班级名称": "八年级6班",
+        "期中平均分": 83.17857142857143,
+        "期末平均分": 90.48837209302326,
+        "提升分数": 7.309800664451828
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-007",
+    "category": "成绩",
+    "difficulty": "medium",
+    "query": "七年级期中语文各班实考人数和应考人数分别是多少？只输出班级名称、实考人数、应考人数。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(r.score) AS 实考人数, COUNT(r.result_id) AS 应考人数 FROM exam_results r JOIN exams x ON r.exam_id=x.exam_id\nJOIN enrollments e ON r.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE x.grade=7 AND x.exam_type='midterm' AND x.subject_id='CHN' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "实考人数",
+        "aliases": [
+          "实考人数",
+          "attended_students"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "应考人数",
+        "aliases": [
+          "应考人数",
+          "expected_students"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.exam_results.enrollment_id",
+      "school_teaching.exam_results.exam_id",
+      "school_teaching.exam_results.result_id",
+      "school_teaching.exam_results.score",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "七年级6班",
+        "实考人数": 39,
+        "应考人数": 41
+      },
+      {
+        "班级名称": "七年级1班",
+        "实考人数": 46,
+        "应考人数": 46
+      },
+      {
+        "班级名称": "七年级2班",
+        "实考人数": 42,
+        "应考人数": 43
+      },
+      {
+        "班级名称": "七年级3班",
+        "实考人数": 42,
+        "应考人数": 43
+      },
+      {
+        "班级名称": "七年级4班",
+        "实考人数": 46,
+        "应考人数": 46
+      },
+      {
+        "班级名称": "七年级5班",
+        "实考人数": 41,
+        "应考人数": 43
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-008",
+    "category": "成绩",
+    "difficulty": "easy",
+    "query": "2026年9月举行了多少场考试？输出考试场次。",
+    "gold_sql": "SELECT COUNT(x.exam_id) AS 考试场次 FROM exams x WHERE x.exam_date>='2026-09-01' AND x.exam_date<'2026-10-01'",
+    "columns": [
+      {
+        "name": "考试场次",
+        "aliases": [
+          "考试场次",
+          "exam_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exams.exam_date",
+      "school_teaching.exams.exam_id"
+    ],
+    "expected_rows": [
+      {
+        "考试场次": 0
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-009",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "本学期每月出勤率是多少？输出月份（YYYY-MM）、出勤率；出勤含正常和迟到，分母含请假和缺勤，用0到1。",
+    "gold_sql": "SELECT strftime(l.lesson_date,'%Y-%m') AS 月份, COUNT(*) FILTER(WHERE a.attendance_status IN ('present','late'))*1.0/COUNT(a.attendance_id) AS 出勤率 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE c.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "月份",
+        "aliases": [
+          "月份",
+          "month"
+        ],
+        "kind": "month"
+      },
+      {
+        "name": "出勤率",
+        "aliases": [
+          "出勤率",
+          "attendance_rate"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.attendance_status",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.term_id",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_date",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": [
+      {
+        "月份": "2026-04",
+        "出勤率": 0.9717692974848222
+      },
+      {
+        "月份": "2026-07",
+        "出勤率": 0.9791600633914421
+      },
+      {
+        "月份": "2026-05",
+        "出勤率": 0.9802110436542353
+      },
+      {
+        "月份": "2026-03",
+        "出勤率": 0.9762103106862411
+      },
+      {
+        "月份": "2026-06",
+        "出勤率": 0.982235025807226
+      },
+      {
+        "月份": "2026-02",
+        "出勤率": 0.9792565635560176
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-010",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "2026年3月各年级迟到人次是多少？输出年级、迟到人次。",
+    "gold_sql": "SELECT c.grade AS 年级, COUNT(a.attendance_id) AS 迟到人次 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE l.lesson_date>='2026-03-01' AND l.lesson_date<'2026-04-01' AND a.attendance_status='late' GROUP BY 1",
+    "columns": [
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "迟到人次",
+        "aliases": [
+          "迟到人次",
+          "late_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.attendance_status",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.grade",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_date",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": [
+      {
+        "年级": 9,
+        "迟到人次": 321
+      },
+      {
+        "年级": 7,
+        "迟到人次": 281
+      },
+      {
+        "年级": 8,
+        "迟到人次": 328
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-011",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "全学期各班请假人次是多少？只输出班级名称、请假人次。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(a.attendance_id) AS 请假人次 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE a.attendance_status='excused' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "请假人次",
+        "aliases": [
+          "请假人次",
+          "excused_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.attendance_status",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "七年级1班",
+        "请假人次": 323
+      },
+      {
+        "班级名称": "九年级1班",
+        "请假人次": 240
+      },
+      {
+        "班级名称": "九年级6班",
+        "请假人次": 280
+      },
+      {
+        "班级名称": "九年级5班",
+        "请假人次": 285
+      },
+      {
+        "班级名称": "八年级2班",
+        "请假人次": 325
+      },
+      {
+        "班级名称": "八年级3班",
+        "请假人次": 375
+      },
+      {
+        "班级名称": "八年级6班",
+        "请假人次": 319
+      },
+      {
+        "班级名称": "七年级2班",
+        "请假人次": 257
+      },
+      {
+        "班级名称": "七年级6班",
+        "请假人次": 269
+      },
+      {
+        "班级名称": "八年级5班",
+        "请假人次": 356
+      },
+      {
+        "班级名称": "九年级4班",
+        "请假人次": 280
+      },
+      {
+        "班级名称": "七年级3班",
+        "请假人次": 304
+      },
+      {
+        "班级名称": "九年级3班",
+        "请假人次": 265
+      },
+      {
+        "班级名称": "八年级1班",
+        "请假人次": 432
+      },
+      {
+        "班级名称": "九年级2班",
+        "请假人次": 190
+      },
+      {
+        "班级名称": "七年级4班",
+        "请假人次": 332
+      },
+      {
+        "班级名称": "七年级5班",
+        "请假人次": 229
+      },
+      {
+        "班级名称": "八年级4班",
+        "请假人次": 313
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-012",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "全学期各年级迟到记录的平均迟到分钟数是多少？只统计迟到，输出年级、平均迟到分钟数。",
+    "gold_sql": "SELECT c.grade AS 年级, AVG(a.late_minutes) AS 平均迟到分钟数 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE a.attendance_status='late' GROUP BY 1",
+    "columns": [
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "平均迟到分钟数",
+        "aliases": [
+          "平均迟到分钟数",
+          "average_late_minutes"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_status",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.late_minutes",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.grade",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": [
+      {
+        "年级": 9,
+        "平均迟到分钟数": 9.567476948868398
+      },
+      {
+        "年级": 8,
+        "平均迟到分钟数": 9.700916230366492
+      },
+      {
+        "年级": 7,
+        "平均迟到分钟数": 9.48330804248862
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-013",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "全学期缺勤（absent）人次最多的前5个班级是什么？输出班级名称、缺勤人次；人次降序，同值按班级名称升序。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(a.attendance_id) AS 缺勤人次 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE a.attendance_status='absent' GROUP BY 1 ORDER BY 2 DESC,1 ASC LIMIT 5",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "缺勤人次",
+        "aliases": [
+          "缺勤人次",
+          "absent_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": true,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.attendance_status",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级4班",
+        "缺勤人次": 146
+      },
+      {
+        "班级名称": "九年级4班",
+        "缺勤人次": 105
+      },
+      {
+        "班级名称": "七年级2班",
+        "缺勤人次": 100
+      },
+      {
+        "班级名称": "八年级2班",
+        "缺勤人次": 98
+      },
+      {
+        "班级名称": "八年级1班",
+        "缺勤人次": 95
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-014",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "2026年4月各班出勤率是多少？输出班级名称、出勤率；正常和迟到算出勤，所有应到记录作分母，用0到1。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(*) FILTER(WHERE a.attendance_status IN ('present','late'))*1.0/COUNT(a.attendance_id) AS 出勤率 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE l.lesson_date>='2026-04-01' AND l.lesson_date<'2026-05-01' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "出勤率",
+        "aliases": [
+          "出勤率",
+          "attendance_rate"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.attendance_status",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_date",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级1班",
+        "出勤率": 0.9714076246334311
+      },
+      {
+        "班级名称": "七年级4班",
+        "出勤率": 0.9737539766702015
+      },
+      {
+        "班级名称": "七年级5班",
+        "出勤率": 0.9801474758933636
+      },
+      {
+        "班级名称": "八年级4班",
+        "出勤率": 0.9670954972785749
+      },
+      {
+        "班级名称": "八年级5班",
+        "出勤率": 0.9705029013539652
+      },
+      {
+        "班级名称": "九年级4班",
+        "出勤率": 0.966931216931217
+      },
+      {
+        "班级名称": "九年级2班",
+        "出勤率": 0.975
+      },
+      {
+        "班级名称": "七年级2班",
+        "出勤率": 0.9700196133370692
+      },
+      {
+        "班级名称": "八年级2班",
+        "出勤率": 0.9727857496288966
+      },
+      {
+        "班级名称": "八年级3班",
+        "出勤率": 0.9592198581560284
+      },
+      {
+        "班级名称": "八年级6班",
+        "出勤率": 0.9714928732183046
+      },
+      {
+        "班级名称": "九年级5班",
+        "出勤率": 0.9709595959595959
+      },
+      {
+        "班级名称": "七年级1班",
+        "出勤率": 0.9846235418875928
+      },
+      {
+        "班级名称": "九年级1班",
+        "出勤率": 0.9659090909090909
+      },
+      {
+        "班级名称": "九年级6班",
+        "出勤率": 0.9689922480620154
+      },
+      {
+        "班级名称": "七年级3班",
+        "出勤率": 0.9829083776968338
+      },
+      {
+        "班级名称": "九年级3班",
+        "出勤率": 0.9734299516908212
+      },
+      {
+        "班级名称": "七年级6班",
+        "出勤率": 0.968851013811343
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-015",
+    "category": "考勤",
+    "difficulty": "easy",
+    "query": "全学期按考勤状态统计课堂考勤记录数，输出考勤状态（原始英文编码）、记录数。",
+    "gold_sql": "SELECT a.attendance_status AS 考勤状态, COUNT(a.attendance_id) AS 记录数 FROM attendance a GROUP BY 1",
+    "columns": [
+      {
+        "name": "考勤状态",
+        "aliases": [
+          "考勤状态",
+          "attendance_status"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "记录数",
+        "aliases": [
+          "记录数",
+          "record_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.attendance_status"
+    ],
+    "expected_rows": [
+      {
+        "考勤状态": "late",
+        "记录数": 4039
+      },
+      {
+        "考勤状态": "excused",
+        "记录数": 5374
+      },
+      {
+        "考勤状态": "present",
+        "记录数": 299139
+      },
+      {
+        "考勤状态": "absent",
+        "记录数": 1536
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-016",
+    "category": "考勤",
+    "difficulty": "medium",
+    "query": "2026年9月各班有多少条考勤记录？输出班级名称、记录数；仅返回有记录的班级。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(a.attendance_id) AS 记录数 FROM attendance a JOIN lessons l ON a.lesson_id=l.lesson_id\nJOIN enrollments e ON a.enrollment_id=e.enrollment_id\nJOIN classes c ON e.class_id=c.class_id WHERE l.lesson_date>='2026-09-01' AND l.lesson_date<'2026-10-01' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "记录数",
+        "aliases": [
+          "记录数",
+          "record_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.attendance.attendance_id",
+      "school_teaching.attendance.enrollment_id",
+      "school_teaching.attendance.lesson_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.lessons.lesson_date",
+      "school_teaching.lessons.lesson_id"
+    ],
+    "expected_rows": []
+  },
+  {
+    "case_id": "EDU-017",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "本学期各班作业完成率和按时提交率是多少？输出班级名称、完成率、按时提交率；分母包括未交，补交算完成，比率用0到1。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(*) FILTER(WHERE s.submission_status IN ('on_time','late'))*1.0/COUNT(s.submission_id) AS 完成率, COUNT(*) FILTER(WHERE s.submission_status='on_time')*1.0/COUNT(s.submission_id) AS 按时提交率 FROM assignment_submissions s JOIN assignments a ON s.assignment_id=a.assignment_id\nJOIN teaching_assignments t ON a.teaching_id=t.teaching_id\nJOIN classes c ON t.class_id=c.class_id WHERE t.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "完成率",
+        "aliases": [
+          "完成率",
+          "completion_rate"
+        ],
+        "kind": "ratio"
+      },
+      {
+        "name": "按时提交率",
+        "aliases": [
+          "按时提交率",
+          "on_time_rate"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignment_submissions.assignment_id",
+      "school_teaching.assignment_submissions.submission_id",
+      "school_teaching.assignment_submissions.submission_status",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.teaching_assignments.class_id",
+      "school_teaching.teaching_assignments.teaching_id",
+      "school_teaching.teaching_assignments.term_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "七年级2班",
+        "完成率": 0.9726181545386346,
+        "按时提交率": 0.9133533383345837
+      },
+      {
+        "班级名称": "八年级2班",
+        "完成率": 0.9625884732052579,
+        "按时提交率": 0.8894506235254466
+      },
+      {
+        "班级名称": "八年级3班",
+        "完成率": 0.9687074829931973,
+        "按时提交率": 0.9098639455782312
+      },
+      {
+        "班级名称": "八年级6班",
+        "完成率": 0.9720930232558139,
+        "按时提交率": 0.9136212624584718
+      },
+      {
+        "班级名称": "九年级5班",
+        "完成率": 0.9677685950413223,
+        "按时提交率": 0.9066115702479339
+      },
+      {
+        "班级名称": "七年级6班",
+        "完成率": 0.9752032520325203,
+        "按时提交率": 0.9272357723577236
+      },
+      {
+        "班级名称": "七年级1班",
+        "完成率": 0.97688060731539,
+        "按时提交率": 0.9137336093857833
+      },
+      {
+        "班级名称": "九年级1班",
+        "完成率": 0.9768595041322314,
+        "按时提交率": 0.9169421487603305
+      },
+      {
+        "班级名称": "九年级6班",
+        "完成率": 0.9720930232558139,
+        "按时提交率": 0.9052854122621564
+      },
+      {
+        "班级名称": "八年级1班",
+        "完成率": 0.9720026350461133,
+        "按时提交率": 0.910737812911726
+      },
+      {
+        "班级名称": "九年级2班",
+        "完成率": 0.9668181818181818,
+        "按时提交率": 0.8954545454545455
+      },
+      {
+        "班级名称": "七年级4班",
+        "完成率": 0.9650748396293657,
+        "按时提交率": 0.898431931575196
+      },
+      {
+        "班级名称": "七年级5班",
+        "完成率": 0.9745293466223699,
+        "按时提交率": 0.9191583610188261
+      },
+      {
+        "班级名称": "八年级4班",
+        "完成率": 0.9642974123812643,
+        "按时提交率": 0.8984605306256142
+      },
+      {
+        "班级名称": "七年级3班",
+        "完成率": 0.9726181545386346,
+        "按时提交率": 0.9107276819204801
+      },
+      {
+        "班级名称": "九年级3班",
+        "完成率": 0.9790372670807453,
+        "按时提交率": 0.9138198757763976
+      },
+      {
+        "班级名称": "八年级5班",
+        "完成率": 0.9724025974025974,
+        "按时提交率": 0.9181818181818182
+      },
+      {
+        "班级名称": "九年级4班",
+        "完成率": 0.970995670995671,
+        "按时提交率": 0.9056277056277057
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-018",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "各年级作业未交人次是多少？只输出年级、未交人次。",
+    "gold_sql": "SELECT c.grade AS 年级, COUNT(s.submission_id) AS 未交人次 FROM assignment_submissions s JOIN assignments a ON s.assignment_id=a.assignment_id\nJOIN teaching_assignments t ON a.teaching_id=t.teaching_id\nJOIN classes c ON t.class_id=c.class_id WHERE s.submission_status='missing' GROUP BY 1",
+    "columns": [
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "未交人次",
+        "aliases": [
+          "未交人次",
+          "missing_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignment_submissions.assignment_id",
+      "school_teaching.assignment_submissions.submission_id",
+      "school_teaching.assignment_submissions.submission_status",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.grade",
+      "school_teaching.teaching_assignments.class_id",
+      "school_teaching.teaching_assignments.teaching_id"
+    ],
+    "expected_rows": [
+      {
+        "年级": 9,
+        "未交人次": 394
+      },
+      {
+        "年级": 7,
+        "未交人次": 441
+      },
+      {
+        "年级": 8,
+        "未交人次": 566
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-019",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "2026年3月各学科布置了多少份作业？按布置时间筛选，输出学科名称、作业份数，每份作业只算一次。",
+    "gold_sql": "SELECT s.subject_name AS 学科名称, COUNT(a.assignment_id) AS 作业份数 FROM assignments a JOIN teaching_assignments t ON a.teaching_id=t.teaching_id JOIN subjects s ON t.subject_id=s.subject_id WHERE a.assigned_at>='2026-03-01' AND a.assigned_at<'2026-04-01' GROUP BY 1",
+    "columns": [
+      {
+        "name": "学科名称",
+        "aliases": [
+          "学科名称",
+          "subject_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "作业份数",
+        "aliases": [
+          "作业份数",
+          "assignment_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignments.assigned_at",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.subjects.subject_id",
+      "school_teaching.subjects.subject_name",
+      "school_teaching.teaching_assignments.subject_id",
+      "school_teaching.teaching_assignments.teaching_id"
+    ],
+    "expected_rows": [
+      {
+        "学科名称": "生物",
+        "作业份数": 21
+      },
+      {
+        "学科名称": "道德与法治",
+        "作业份数": 30
+      },
+      {
+        "学科名称": "历史",
+        "作业份数": 30
+      },
+      {
+        "学科名称": "地理",
+        "作业份数": 21
+      },
+      {
+        "学科名称": "语文",
+        "作业份数": 36
+      },
+      {
+        "学科名称": "化学",
+        "作业份数": 10
+      },
+      {
+        "学科名称": "数学",
+        "作业份数": 36
+      },
+      {
+        "学科名称": "物理",
+        "作业份数": 24
+      },
+      {
+        "学科名称": "英语",
+        "作业份数": 36
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-020",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "八年级各班数学作业的已批改平均原始分是多少？排除无成绩记录，输出班级名称、平均分。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, AVG(s.score) AS 平均分 FROM assignment_submissions s JOIN assignments a ON s.assignment_id=a.assignment_id\nJOIN teaching_assignments t ON a.teaching_id=t.teaching_id\nJOIN classes c ON t.class_id=c.class_id WHERE c.grade=8 AND t.subject_id='MAT' GROUP BY 1",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "平均分",
+        "aliases": [
+          "平均分",
+          "average_score"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignment_submissions.assignment_id",
+      "school_teaching.assignment_submissions.score",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.classes.grade",
+      "school_teaching.teaching_assignments.class_id",
+      "school_teaching.teaching_assignments.subject_id",
+      "school_teaching.teaching_assignments.teaching_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级1班",
+        "平均分": 75.449104859335
+      },
+      {
+        "班级名称": "八年级4班",
+        "平均分": 76.25145888594164
+      },
+      {
+        "班级名称": "八年级2班",
+        "平均分": 76.04043715846994
+      },
+      {
+        "班级名称": "八年级3班",
+        "平均分": 73.84794520547945
+      },
+      {
+        "班级名称": "八年级6班",
+        "平均分": 78.9793103448276
+      },
+      {
+        "班级名称": "八年级5班",
+        "平均分": 75.64267015706807
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-021",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "全学期各学科作业平均预计用时是多少分钟？每份作业等权，输出学科名称、平均预计分钟数。",
+    "gold_sql": "SELECT s.subject_name AS 学科名称, AVG(a.estimated_minutes) AS 平均预计分钟数 FROM assignments a JOIN teaching_assignments t ON a.teaching_id=t.teaching_id JOIN subjects s ON t.subject_id=s.subject_id GROUP BY 1",
+    "columns": [
+      {
+        "name": "学科名称",
+        "aliases": [
+          "学科名称",
+          "subject_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "平均预计分钟数",
+        "aliases": [
+          "平均预计分钟数",
+          "average_estimated_minutes"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignments.estimated_minutes",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.subjects.subject_id",
+      "school_teaching.subjects.subject_name",
+      "school_teaching.teaching_assignments.subject_id",
+      "school_teaching.teaching_assignments.teaching_id"
+    ],
+    "expected_rows": [
+      {
+        "学科名称": "历史",
+        "平均预计分钟数": 22.93959731543624
+      },
+      {
+        "学科名称": "语文",
+        "平均预计分钟数": 22.03846153846154
+      },
+      {
+        "学科名称": "化学",
+        "平均预计分钟数": 22.108695652173914
+      },
+      {
+        "学科名称": "数学",
+        "平均预计分钟数": 22.262820512820515
+      },
+      {
+        "学科名称": "物理",
+        "平均预计分钟数": 22.480392156862745
+      },
+      {
+        "学科名称": "道德与法治",
+        "平均预计分钟数": 23.114093959731544
+      },
+      {
+        "学科名称": "英语",
+        "平均预计分钟数": 21.564102564102566
+      },
+      {
+        "学科名称": "地理",
+        "平均预计分钟数": 23.41346153846154
+      },
+      {
+        "学科名称": "生物",
+        "平均预计分钟数": 22.524271844660195
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-022",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "全学期补交（late）作业人次最多的前5个班级是什么？输出班级名称、补交人次；人次降序，同值按班级名称升序。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, COUNT(s.submission_id) AS 补交人次 FROM assignment_submissions s JOIN assignments a ON s.assignment_id=a.assignment_id\nJOIN teaching_assignments t ON a.teaching_id=t.teaching_id\nJOIN classes c ON t.class_id=c.class_id WHERE s.submission_status='late' GROUP BY 1 ORDER BY 2 DESC,1 ASC LIMIT 5",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "补交人次",
+        "aliases": [
+          "补交人次",
+          "late_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": true,
+    "gold_fields": [
+      "school_teaching.assignment_submissions.assignment_id",
+      "school_teaching.assignment_submissions.submission_id",
+      "school_teaching.assignment_submissions.submission_status",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.teaching_assignments.class_id",
+      "school_teaching.teaching_assignments.teaching_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级2班",
+        "补交人次": 217
+      },
+      {
+        "班级名称": "八年级4班",
+        "补交人次": 201
+      },
+      {
+        "班级名称": "七年级4班",
+        "补交人次": 187
+      },
+      {
+        "班级名称": "八年级1班",
+        "补交人次": 186
+      },
+      {
+        "班级名称": "七年级1班",
+        "补交人次": 183
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-023",
+    "category": "作业",
+    "difficulty": "medium",
+    "query": "各年级英语作业完成率是多少？输出年级、完成率，按时和补交算完成，全部应交记录作分母，用0到1。",
+    "gold_sql": "SELECT c.grade AS 年级, COUNT(*) FILTER(WHERE s.submission_status IN ('on_time','late'))*1.0/COUNT(s.submission_id) AS 完成率 FROM assignment_submissions s JOIN assignments a ON s.assignment_id=a.assignment_id\nJOIN teaching_assignments t ON a.teaching_id=t.teaching_id\nJOIN classes c ON t.class_id=c.class_id WHERE t.subject_id='ENG' GROUP BY 1",
+    "columns": [
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "完成率",
+        "aliases": [
+          "完成率",
+          "completion_rate"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignment_submissions.assignment_id",
+      "school_teaching.assignment_submissions.submission_id",
+      "school_teaching.assignment_submissions.submission_status",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.grade",
+      "school_teaching.teaching_assignments.class_id",
+      "school_teaching.teaching_assignments.subject_id",
+      "school_teaching.teaching_assignments.teaching_id"
+    ],
+    "expected_rows": [
+      {
+        "年级": 9,
+        "完成率": 0.9681467181467182
+      },
+      {
+        "年级": 7,
+        "完成率": 0.9732824427480916
+      },
+      {
+        "年级": 8,
+        "完成率": 0.9622479622479623
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-024",
+    "category": "作业",
+    "difficulty": "easy",
+    "query": "本学期按提交状态统计作业应交记录数，输出提交状态（原始英文编码）、记录数。",
+    "gold_sql": "SELECT s.submission_status AS 提交状态, COUNT(s.submission_id) AS 记录数 FROM assignment_submissions s JOIN assignments a ON s.assignment_id=a.assignment_id JOIN teaching_assignments t ON a.teaching_id=t.teaching_id WHERE t.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "提交状态",
+        "aliases": [
+          "提交状态",
+          "submission_status"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "记录数",
+        "aliases": [
+          "记录数",
+          "record_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.assignment_submissions.assignment_id",
+      "school_teaching.assignment_submissions.submission_id",
+      "school_teaching.assignment_submissions.submission_status",
+      "school_teaching.assignments.assignment_id",
+      "school_teaching.assignments.teaching_id",
+      "school_teaching.teaching_assignments.teaching_id",
+      "school_teaching.teaching_assignments.term_id"
+    ],
+    "expected_rows": [
+      {
+        "提交状态": "on_time",
+        "记录数": 44173
+      },
+      {
+        "提交状态": "missing",
+        "记录数": 1401
+      },
+      {
+        "提交状态": "late",
+        "记录数": 3008
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-025",
+    "category": "知识点",
+    "difficulty": "hard",
+    "query": "八年级期中数学各知识点得分率是多少？输出知识点名称、得分率，以学生题目总得分除以对应题目总满分，用0到1，包含缺考答题记录。",
+    "gold_sql": "SELECT k.knowledge_name AS 知识点名称, SUM(r.score)*1.0/SUM(q.max_score) AS 得分率 FROM question_responses r JOIN exam_questions q ON r.question_id=q.question_id\nJOIN knowledge_points k ON q.knowledge_id=k.knowledge_id\nJOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=8 AND x.exam_type='midterm' AND x.subject_id='MAT' GROUP BY 1",
+    "columns": [
+      {
+        "name": "知识点名称",
+        "aliases": [
+          "知识点名称",
+          "knowledge_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "得分率",
+        "aliases": [
+          "得分率",
+          "score_ratio"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.knowledge_id",
+      "school_teaching.exam_questions.max_score",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.knowledge_points.knowledge_name",
+      "school_teaching.question_responses.question_id",
+      "school_teaching.question_responses.score"
+    ],
+    "expected_rows": [
+      {
+        "知识点名称": "二次根式",
+        "得分率": 0.6964285714285714
+      },
+      {
+        "知识点名称": "勾股定理",
+        "得分率": 0.6315714285714286
+      },
+      {
+        "知识点名称": "平行四边形",
+        "得分率": 0.689375
+      },
+      {
+        "知识点名称": "一次函数",
+        "得分率": 0.6395625
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-026",
+    "category": "知识点",
+    "difficulty": "hard",
+    "query": "七年级期末英语得分率最低的3个知识点是什么？输出知识点名称、得分率；总得分除以对应总满分，包含缺考记录，用0到1，按得分率升序，同值按知识点名称升序。",
+    "gold_sql": "SELECT k.knowledge_name AS 知识点名称, SUM(r.score)*1.0/SUM(q.max_score) AS 得分率 FROM question_responses r JOIN exam_questions q ON r.question_id=q.question_id\nJOIN knowledge_points k ON q.knowledge_id=k.knowledge_id\nJOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=7 AND x.exam_type='final' AND x.subject_id='ENG' GROUP BY 1 ORDER BY 2,1 LIMIT 3",
+    "columns": [
+      {
+        "name": "知识点名称",
+        "aliases": [
+          "知识点名称",
+          "knowledge_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "得分率",
+        "aliases": [
+          "得分率",
+          "score_ratio"
+        ],
+        "kind": "ratio"
+      }
+    ],
+    "order_sensitive": true,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.knowledge_id",
+      "school_teaching.exam_questions.max_score",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.knowledge_points.knowledge_name",
+      "school_teaching.question_responses.question_id",
+      "school_teaching.question_responses.score"
+    ],
+    "expected_rows": [
+      {
+        "知识点名称": "情态动词",
+        "得分率": 0.6695736434108527
+      },
+      {
+        "知识点名称": "阅读理解",
+        "得分率": 0.6969476744186046
+      },
+      {
+        "知识点名称": "书面表达",
+        "得分率": 0.7130975452196382
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-027",
+    "category": "知识点",
+    "difficulty": "medium",
+    "query": "九年级期中物理试卷按题型统计题目数和总满分，输出题型（原始编码）、题目数、总满分。",
+    "gold_sql": "SELECT q.question_type AS 题型, COUNT(q.question_id) AS 题目数, SUM(q.max_score) AS 总满分 FROM exam_questions q JOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=9 AND x.exam_type='midterm' AND x.subject_id='PHY' GROUP BY 1",
+    "columns": [
+      {
+        "name": "题型",
+        "aliases": [
+          "题型",
+          "question_type"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "题目数",
+        "aliases": [
+          "题目数",
+          "question_count"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "总满分",
+        "aliases": [
+          "总满分",
+          "total_max_score"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.max_score",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exam_questions.question_type",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id"
+    ],
+    "expected_rows": [
+      {
+        "题型": "constructed",
+        "题目数": 10,
+        "总满分": 70
+      },
+      {
+        "题型": "choice",
+        "题目数": 10,
+        "总满分": 30
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-028",
+    "category": "知识点",
+    "difficulty": "easy",
+    "query": "各学科各年级配置了多少个知识点？输出学科名称、年级、知识点数。",
+    "gold_sql": "SELECT s.subject_name AS 学科名称, k.grade AS 年级, COUNT(k.knowledge_id) AS 知识点数 FROM knowledge_points k JOIN subjects s ON k.subject_id=s.subject_id GROUP BY 1,2",
+    "columns": [
+      {
+        "name": "学科名称",
+        "aliases": [
+          "学科名称",
+          "subject_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "知识点数",
+        "aliases": [
+          "知识点数",
+          "knowledge_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.knowledge_points.grade",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.knowledge_points.subject_id",
+      "school_teaching.subjects.subject_id",
+      "school_teaching.subjects.subject_name"
+    ],
+    "expected_rows": [
+      {
+        "学科名称": "英语",
+        "年级": 9,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "物理",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "语文",
+        "年级": 9,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "数学",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "数学",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "历史",
+        "年级": 9,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "历史",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "历史",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "道德与法治",
+        "年级": 9,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "英语",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "英语",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "生物",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "生物",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "物理",
+        "年级": 9,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "道德与法治",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "道德与法治",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "地理",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "地理",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "语文",
+        "年级": 7,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "语文",
+        "年级": 8,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "数学",
+        "年级": 9,
+        "知识点数": 5
+      },
+      {
+        "学科名称": "化学",
+        "年级": 9,
+        "知识点数": 5
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-029",
+    "category": "知识点",
+    "difficulty": "medium",
+    "query": "八年级期末数学答题记录按作答状态统计数量，输出作答状态（原始编码）、记录数。",
+    "gold_sql": "SELECT r.response_status AS 作答状态, COUNT(r.response_id) AS 记录数 FROM question_responses r JOIN exam_questions q ON r.question_id=q.question_id\nJOIN knowledge_points k ON q.knowledge_id=k.knowledge_id\nJOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=8 AND x.exam_type='final' AND x.subject_id='MAT' GROUP BY 1",
+    "columns": [
+      {
+        "name": "作答状态",
+        "aliases": [
+          "作答状态",
+          "response_status"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "记录数",
+        "aliases": [
+          "记录数",
+          "record_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.knowledge_id",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.question_responses.question_id",
+      "school_teaching.question_responses.response_id",
+      "school_teaching.question_responses.response_status"
+    ],
+    "expected_rows": [
+      {
+        "作答状态": "blank",
+        "记录数": 21
+      },
+      {
+        "作答状态": "answered",
+        "记录数": 5079
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-030",
+    "category": "知识点",
+    "difficulty": "medium",
+    "query": "七年级期中数学试卷按知识点统计题目数，输出知识点名称、题目数；每道题只算一次。",
+    "gold_sql": "SELECT k.knowledge_name AS 知识点名称, COUNT(q.question_id) AS 题目数 FROM exam_questions q JOIN knowledge_points k ON q.knowledge_id=k.knowledge_id JOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=7 AND x.exam_type='midterm' AND x.subject_id='MAT' GROUP BY 1",
+    "columns": [
+      {
+        "name": "知识点名称",
+        "aliases": [
+          "知识点名称",
+          "knowledge_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "题目数",
+        "aliases": [
+          "题目数",
+          "question_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.knowledge_id",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.knowledge_points.knowledge_name"
+    ],
+    "expected_rows": [
+      {
+        "知识点名称": "相交线与平行线",
+        "题目数": 5
+      },
+      {
+        "知识点名称": "实数",
+        "题目数": 5
+      },
+      {
+        "知识点名称": "整式运算",
+        "题目数": 5
+      },
+      {
+        "知识点名称": "二元一次方程组",
+        "题目数": 5
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-031",
+    "category": "知识点",
+    "difficulty": "hard",
+    "query": "九年级期末化学各知识点的应答记录数和满分总和是多少？输出知识点名称、应答记录数、满分总和；包含缺考记录，每条学生答题记录对应一次题目满分。",
+    "gold_sql": "SELECT k.knowledge_name AS 知识点名称, COUNT(r.response_id) AS 应答记录数, SUM(q.max_score) AS 满分总和 FROM question_responses r JOIN exam_questions q ON r.question_id=q.question_id\nJOIN knowledge_points k ON q.knowledge_id=k.knowledge_id\nJOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=9 AND x.exam_type='final' AND x.subject_id='CHE' GROUP BY 1",
+    "columns": [
+      {
+        "name": "知识点名称",
+        "aliases": [
+          "知识点名称",
+          "knowledge_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "应答记录数",
+        "aliases": [
+          "应答记录数",
+          "response_count"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "满分总和",
+        "aliases": [
+          "满分总和",
+          "total_max_score"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.knowledge_id",
+      "school_teaching.exam_questions.max_score",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.knowledge_points.knowledge_name",
+      "school_teaching.question_responses.question_id",
+      "school_teaching.question_responses.response_id"
+    ],
+    "expected_rows": [
+      {
+        "知识点名称": "溶液",
+        "应答记录数": 1008,
+        "满分总和": 5040
+      },
+      {
+        "知识点名称": "盐与化肥",
+        "应答记录数": 1008,
+        "满分总和": 5040
+      },
+      {
+        "知识点名称": "酸和碱",
+        "应答记录数": 1008,
+        "满分总和": 5040
+      },
+      {
+        "知识点名称": "化学计算",
+        "应答记录数": 1008,
+        "满分总和": 5040
+      },
+      {
+        "知识点名称": "实验探究",
+        "应答记录数": 1008,
+        "满分总和": 5040
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-032",
+    "category": "知识点",
+    "difficulty": "medium",
+    "query": "七年级期末语文各题型平均每条答题记录得分是多少？输出题型（原始编码）、平均得分，SQL平均值排除空分数。",
+    "gold_sql": "SELECT q.question_type AS 题型, AVG(r.score) AS 平均得分 FROM question_responses r JOIN exam_questions q ON r.question_id=q.question_id\nJOIN knowledge_points k ON q.knowledge_id=k.knowledge_id\nJOIN exams x ON q.exam_id=x.exam_id WHERE x.grade=7 AND x.exam_type='final' AND x.subject_id='CHN' GROUP BY 1",
+    "columns": [
+      {
+        "name": "题型",
+        "aliases": [
+          "题型",
+          "question_type"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "平均得分",
+        "aliases": [
+          "平均得分",
+          "average_score"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.exam_questions.exam_id",
+      "school_teaching.exam_questions.knowledge_id",
+      "school_teaching.exam_questions.question_id",
+      "school_teaching.exam_questions.question_type",
+      "school_teaching.exams.exam_id",
+      "school_teaching.exams.exam_type",
+      "school_teaching.exams.grade",
+      "school_teaching.exams.subject_id",
+      "school_teaching.knowledge_points.knowledge_id",
+      "school_teaching.question_responses.question_id",
+      "school_teaching.question_responses.score"
+    ],
+    "expected_rows": [
+      {
+        "题型": "choice",
+        "平均得分": 2.891472868217054
+      },
+      {
+        "题型": "constructed",
+        "平均得分": 5.573449612403101
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-033",
+    "category": "教学安排",
+    "difficulty": "medium",
+    "query": "本学期各年级在籍学生有多少人？输出年级、学生人数，按本学期学籍记录统计。",
+    "gold_sql": "SELECT c.grade AS 年级, COUNT(e.enrollment_id) AS 学生人数 FROM enrollments e JOIN classes c ON e.class_id=c.class_id WHERE e.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "年级",
+        "aliases": [
+          "年级",
+          "grade"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "学生人数",
+        "aliases": [
+          "学生人数",
+          "student_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.grade",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.enrollments.term_id"
+    ],
+    "expected_rows": [
+      {
+        "年级": 7,
+        "学生人数": 262
+      },
+      {
+        "年级": 8,
+        "学生人数": 259
+      },
+      {
+        "年级": 9,
+        "学生人数": 259
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-034",
+    "category": "教学安排",
+    "difficulty": "easy",
+    "query": "列出本学期所有班级的班主任，只输出班级名称、班主任姓名。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, t.teacher_name AS 班主任姓名 FROM classes c JOIN teachers t ON c.homeroom_teacher_id=t.teacher_id WHERE c.term_id='T2025_2026_2'",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "班主任姓名",
+        "aliases": [
+          "班主任姓名",
+          "homeroom_teacher_name"
+        ],
+        "kind": "text"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_name",
+      "school_teaching.classes.homeroom_teacher_id",
+      "school_teaching.classes.term_id",
+      "school_teaching.teachers.teacher_id",
+      "school_teaching.teachers.teacher_name"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "七年级1班",
+        "班主任姓名": "严梓萱"
+      },
+      {
+        "班级名称": "七年级4班",
+        "班主任姓名": "沈语彤"
+      },
+      {
+        "班级名称": "七年级2班",
+        "班主任姓名": "姜嘉树"
+      },
+      {
+        "班级名称": "七年级5班",
+        "班主任姓名": "周雨晨"
+      },
+      {
+        "班级名称": "七年级3班",
+        "班主任姓名": "何一诺"
+      },
+      {
+        "班级名称": "七年级6班",
+        "班主任姓名": "孔欣怡"
+      },
+      {
+        "班级名称": "八年级1班",
+        "班主任姓名": "钱书瑶"
+      },
+      {
+        "班级名称": "八年级4班",
+        "班主任姓名": "陶浩然"
+      },
+      {
+        "班级名称": "八年级2班",
+        "班主任姓名": "秦思源"
+      },
+      {
+        "班级名称": "八年级5班",
+        "班主任姓名": "郑雨晨"
+      },
+      {
+        "班级名称": "八年级3班",
+        "班主任姓名": "蒋嘉宁"
+      },
+      {
+        "班级名称": "八年级6班",
+        "班主任姓名": "朱雨晨"
+      },
+      {
+        "班级名称": "九年级1班",
+        "班主任姓名": "苏以宁"
+      },
+      {
+        "班级名称": "九年级4班",
+        "班主任姓名": "郑书瑶"
+      },
+      {
+        "班级名称": "九年级2班",
+        "班主任姓名": "朱星辰"
+      },
+      {
+        "班级名称": "九年级5班",
+        "班主任姓名": "方泽宇"
+      },
+      {
+        "班级名称": "九年级3班",
+        "班主任姓名": "魏博文"
+      },
+      {
+        "班级名称": "九年级6班",
+        "班主任姓名": "许柏舟"
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-035",
+    "category": "教学安排",
+    "difficulty": "medium",
+    "query": "本学期八年级各班数学任课教师是谁，每周几课时？只输出班级名称、教师姓名、周课时数。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, t.teacher_name AS 教师姓名, a.weekly_periods AS 周课时数 FROM teaching_assignments a JOIN classes c ON a.class_id=c.class_id JOIN teachers t ON a.teacher_id=t.teacher_id WHERE a.term_id='T2025_2026_2' AND c.grade=8 AND a.subject_id='MAT'",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "教师姓名",
+        "aliases": [
+          "教师姓名",
+          "teacher_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "周课时数",
+        "aliases": [
+          "周课时数",
+          "weekly_periods"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.classes.grade",
+      "school_teaching.teachers.teacher_id",
+      "school_teaching.teachers.teacher_name",
+      "school_teaching.teaching_assignments.class_id",
+      "school_teaching.teaching_assignments.subject_id",
+      "school_teaching.teaching_assignments.teacher_id",
+      "school_teaching.teaching_assignments.term_id",
+      "school_teaching.teaching_assignments.weekly_periods"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "八年级2班",
+        "教师姓名": "秦思源",
+        "周课时数": 5
+      },
+      {
+        "班级名称": "八年级4班",
+        "教师姓名": "张怀瑾",
+        "周课时数": 5
+      },
+      {
+        "班级名称": "八年级6班",
+        "教师姓名": "郑雨晨",
+        "周课时数": 5
+      },
+      {
+        "班级名称": "八年级1班",
+        "教师姓名": "秦思源",
+        "周课时数": 5
+      },
+      {
+        "班级名称": "八年级3班",
+        "教师姓名": "张怀瑾",
+        "周课时数": 5
+      },
+      {
+        "班级名称": "八年级5班",
+        "教师姓名": "郑雨晨",
+        "周课时数": 5
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-036",
+    "category": "教学安排",
+    "difficulty": "medium",
+    "query": "本学期每月实际排课多少节？输出月份（YYYY-MM）、课节数，按课节日期分组。",
+    "gold_sql": "SELECT strftime(l.lesson_date,'%Y-%m') AS 月份, COUNT(l.lesson_id) AS 课节数 FROM lessons l JOIN teaching_assignments t ON l.teaching_id=t.teaching_id WHERE t.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "月份",
+        "aliases": [
+          "月份",
+          "month"
+        ],
+        "kind": "month"
+      },
+      {
+        "name": "课节数",
+        "aliases": [
+          "课节数",
+          "lesson_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.lessons.lesson_date",
+      "school_teaching.lessons.lesson_id",
+      "school_teaching.lessons.teaching_id",
+      "school_teaching.teaching_assignments.teaching_id",
+      "school_teaching.teaching_assignments.term_id"
+    ],
+    "expected_rows": [
+      {
+        "月份": "2026-07",
+        "课节数": 291
+      },
+      {
+        "月份": "2026-02",
+        "课节数": 444
+      },
+      {
+        "月份": "2026-04",
+        "课节数": 1597
+      },
+      {
+        "月份": "2026-03",
+        "课节数": 1690
+      },
+      {
+        "月份": "2026-05",
+        "课节数": 1597
+      },
+      {
+        "月份": "2026-06",
+        "课节数": 1537
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-037",
+    "category": "教学安排",
+    "difficulty": "easy",
+    "query": "教师按职称统计人数和平均教龄，只输出职称、教师人数、平均教龄。",
+    "gold_sql": "SELECT t.title AS 职称, COUNT(t.teacher_id) AS 教师人数, AVG(t.teaching_years) AS 平均教龄 FROM teachers t GROUP BY 1",
+    "columns": [
+      {
+        "name": "职称",
+        "aliases": [
+          "职称",
+          "title"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "教师人数",
+        "aliases": [
+          "教师人数",
+          "teacher_count"
+        ],
+        "kind": "integer"
+      },
+      {
+        "name": "平均教龄",
+        "aliases": [
+          "平均教龄",
+          "average_teaching_years"
+        ],
+        "kind": "score"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.teachers.teacher_id",
+      "school_teaching.teachers.teaching_years",
+      "school_teaching.teachers.title"
+    ],
+    "expected_rows": [
+      {
+        "职称": "一级教师",
+        "教师人数": 30,
+        "平均教龄": 11.666666666666666
+      },
+      {
+        "职称": "高级教师",
+        "教师人数": 21,
+        "平均教龄": 21.38095238095238
+      },
+      {
+        "职称": "二级教师",
+        "教师人数": 15,
+        "平均教龄": 3.6
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-038",
+    "category": "教学安排",
+    "difficulty": "medium",
+    "query": "本学期各班男女学生分别有多少人？输出班级名称、性别（原始编码）、学生人数。",
+    "gold_sql": "SELECT c.class_name AS 班级名称, s.gender AS 性别, COUNT(e.enrollment_id) AS 学生人数 FROM enrollments e JOIN classes c ON e.class_id=c.class_id JOIN students s ON e.student_id=s.student_id WHERE e.term_id='T2025_2026_2' GROUP BY 1,2",
+    "columns": [
+      {
+        "name": "班级名称",
+        "aliases": [
+          "班级名称",
+          "class_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "性别",
+        "aliases": [
+          "性别",
+          "gender"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "学生人数",
+        "aliases": [
+          "学生人数",
+          "student_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.classes.class_id",
+      "school_teaching.classes.class_name",
+      "school_teaching.enrollments.class_id",
+      "school_teaching.enrollments.enrollment_id",
+      "school_teaching.enrollments.student_id",
+      "school_teaching.enrollments.term_id",
+      "school_teaching.students.gender",
+      "school_teaching.students.student_id"
+    ],
+    "expected_rows": [
+      {
+        "班级名称": "七年级2班",
+        "性别": "女",
+        "学生人数": 21
+      },
+      {
+        "班级名称": "七年级3班",
+        "性别": "男",
+        "学生人数": 20
+      },
+      {
+        "班级名称": "八年级2班",
+        "性别": "男",
+        "学生人数": 20
+      },
+      {
+        "班级名称": "九年级1班",
+        "性别": "男",
+        "学生人数": 14
+      },
+      {
+        "班级名称": "九年级2班",
+        "性别": "男",
+        "学生人数": 21
+      },
+      {
+        "班级名称": "九年级6班",
+        "性别": "男",
+        "学生人数": 19
+      },
+      {
+        "班级名称": "七年级5班",
+        "性别": "男",
+        "学生人数": 25
+      },
+      {
+        "班级名称": "七年级6班",
+        "性别": "男",
+        "学生人数": 19
+      },
+      {
+        "班级名称": "八年级4班",
+        "性别": "男",
+        "学生人数": 26
+      },
+      {
+        "班级名称": "八年级5班",
+        "性别": "男",
+        "学生人数": 26
+      },
+      {
+        "班级名称": "九年级3班",
+        "性别": "男",
+        "学生人数": 25
+      },
+      {
+        "班级名称": "九年级4班",
+        "性别": "男",
+        "学生人数": 19
+      },
+      {
+        "班级名称": "七年级2班",
+        "性别": "男",
+        "学生人数": 22
+      },
+      {
+        "班级名称": "七年级3班",
+        "性别": "女",
+        "学生人数": 23
+      },
+      {
+        "班级名称": "八年级2班",
+        "性别": "女",
+        "学生人数": 23
+      },
+      {
+        "班级名称": "九年级1班",
+        "性别": "女",
+        "学生人数": 30
+      },
+      {
+        "班级名称": "九年级2班",
+        "性别": "女",
+        "学生人数": 19
+      },
+      {
+        "班级名称": "九年级6班",
+        "性别": "女",
+        "学生人数": 24
+      },
+      {
+        "班级名称": "七年级5班",
+        "性别": "女",
+        "学生人数": 18
+      },
+      {
+        "班级名称": "七年级6班",
+        "性别": "女",
+        "学生人数": 22
+      },
+      {
+        "班级名称": "八年级4班",
+        "性别": "女",
+        "学生人数": 17
+      },
+      {
+        "班级名称": "八年级5班",
+        "性别": "女",
+        "学生人数": 18
+      },
+      {
+        "班级名称": "九年级3班",
+        "性别": "女",
+        "学生人数": 21
+      },
+      {
+        "班级名称": "九年级4班",
+        "性别": "女",
+        "学生人数": 23
+      },
+      {
+        "班级名称": "七年级1班",
+        "性别": "男",
+        "学生人数": 19
+      },
+      {
+        "班级名称": "七年级4班",
+        "性别": "男",
+        "学生人数": 22
+      },
+      {
+        "班级名称": "八年级1班",
+        "性别": "女",
+        "学生人数": 13
+      },
+      {
+        "班级名称": "八年级3班",
+        "性别": "女",
+        "学生人数": 13
+      },
+      {
+        "班级名称": "八年级6班",
+        "性别": "女",
+        "学生人数": 25
+      },
+      {
+        "班级名称": "九年级5班",
+        "性别": "女",
+        "学生人数": 25
+      },
+      {
+        "班级名称": "七年级1班",
+        "性别": "女",
+        "学生人数": 27
+      },
+      {
+        "班级名称": "七年级4班",
+        "性别": "女",
+        "学生人数": 24
+      },
+      {
+        "班级名称": "八年级1班",
+        "性别": "男",
+        "学生人数": 31
+      },
+      {
+        "班级名称": "八年级3班",
+        "性别": "男",
+        "学生人数": 29
+      },
+      {
+        "班级名称": "八年级6班",
+        "性别": "男",
+        "学生人数": 18
+      },
+      {
+        "班级名称": "九年级5班",
+        "性别": "男",
+        "学生人数": 19
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-039",
+    "category": "教学安排",
+    "difficulty": "easy",
+    "query": "本学期校历按日期类型统计天数，输出日期类型（原始编码）、天数。",
+    "gold_sql": "SELECT a.day_type AS 日期类型, COUNT(a.calendar_date) AS 天数 FROM academic_calendar a WHERE a.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "日期类型",
+        "aliases": [
+          "日期类型",
+          "day_type"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "天数",
+        "aliases": [
+          "天数",
+          "day_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.academic_calendar.calendar_date",
+      "school_teaching.academic_calendar.day_type",
+      "school_teaching.academic_calendar.term_id"
+    ],
+    "expected_rows": [
+      {
+        "日期类型": "exam",
+        "天数": 12
+      },
+      {
+        "日期类型": "holiday",
+        "天数": 5
+      },
+      {
+        "日期类型": "teaching",
+        "天数": 83
+      },
+      {
+        "日期类型": "weekend",
+        "天数": 38
+      }
+    ]
+  },
+  {
+    "case_id": "EDU-040",
+    "category": "教学安排",
+    "difficulty": "medium",
+    "query": "本学期各学科实际排课多少节？输出学科名称、课节数。",
+    "gold_sql": "SELECT s.subject_name AS 学科名称, COUNT(l.lesson_id) AS 课节数 FROM lessons l JOIN teaching_assignments t ON l.teaching_id=t.teaching_id JOIN subjects s ON t.subject_id=s.subject_id WHERE t.term_id='T2025_2026_2' GROUP BY 1",
+    "columns": [
+      {
+        "name": "学科名称",
+        "aliases": [
+          "学科名称",
+          "subject_name"
+        ],
+        "kind": "text"
+      },
+      {
+        "name": "课节数",
+        "aliases": [
+          "课节数",
+          "lesson_count"
+        ],
+        "kind": "integer"
+      }
+    ],
+    "order_sensitive": false,
+    "gold_fields": [
+      "school_teaching.lessons.lesson_id",
+      "school_teaching.lessons.teaching_id",
+      "school_teaching.subjects.subject_id",
+      "school_teaching.subjects.subject_name",
+      "school_teaching.teaching_assignments.subject_id",
+      "school_teaching.teaching_assignments.teaching_id",
+      "school_teaching.teaching_assignments.term_id"
+    ],
+    "expected_rows": [
+      {
+        "学科名称": "历史",
+        "课节数": 580
+      },
+      {
+        "学科名称": "数学",
+        "课节数": 1452
+      },
+      {
+        "学科名称": "物理",
+        "课节数": 560
+      },
+      {
+        "学科名称": "语文",
+        "课节数": 1452
+      },
+      {
+        "学科名称": "化学",
+        "课节数": 252
+      },
+      {
+        "学科名称": "道德与法治",
+        "课节数": 582
+      },
+      {
+        "学科名称": "生物",
+        "课节数": 412
+      },
+      {
+        "学科名称": "地理",
+        "课节数": 414
+      },
+      {
+        "学科名称": "英语",
+        "课节数": 1452
+      }
+    ]
+  }
+]

@@ -1,0 +1,225 @@
+{
+  "database": "school_teaching",
+  "scenario": "学校教学与学情分析（完全合成数据）",
+  "synthetic": true,
+  "seed": 20261019,
+  "data_start": "2026-02-23",
+  "data_end": "2026-07-10",
+  "table_count": 18,
+  "total_rows": 721465,
+  "tables": {
+    "schools": {
+      "row_count": 1,
+      "columns": [
+        "school_id",
+        "school_name",
+        "city",
+        "school_type"
+      ],
+      "sha256": "c4b5ad80c5df7f0aae220223552c535b77ea302cf4c89d04499c16bfc932bd68"
+    },
+    "terms": {
+      "row_count": 1,
+      "columns": [
+        "term_id",
+        "school_id",
+        "academic_year",
+        "term_name",
+        "start_date",
+        "end_date"
+      ],
+      "sha256": "f8c3ed59664a3eb3fa1a9c7403426bc93a1eed403340cc37f9359197034bf0f4"
+    },
+    "teachers": {
+      "row_count": 66,
+      "columns": [
+        "teacher_id",
+        "school_id",
+        "teacher_name",
+        "teaching_years",
+        "title"
+      ],
+      "sha256": "d2a0d21ce20f850ba28e6e9b7b5c9862f76d395b2e15b84f13bcd2712c62b194"
+    },
+    "classes": {
+      "row_count": 18,
+      "columns": [
+        "class_id",
+        "school_id",
+        "term_id",
+        "grade",
+        "class_name",
+        "homeroom_teacher_id"
+      ],
+      "sha256": "64c5b02a05d309fe14bdaaf9d4c1d24424383888203626975d7f0cd6f5325f45"
+    },
+    "students": {
+      "row_count": 780,
+      "columns": [
+        "student_id",
+        "school_id",
+        "student_name",
+        "gender",
+        "birth_date",
+        "enrollment_year"
+      ],
+      "sha256": "23dd5bb9771dec88fb1446a7a794226ec2680925c7d3075dc1762f676412bf7d"
+    },
+    "enrollments": {
+      "row_count": 780,
+      "columns": [
+        "enrollment_id",
+        "student_id",
+        "class_id",
+        "term_id",
+        "valid_from",
+        "valid_to"
+      ],
+      "sha256": "e2df9c38c62218edbeadcef54fce16d17465b430a68d40e3e594114bfbedc975"
+    },
+    "subjects": {
+      "row_count": 9,
+      "columns": [
+        "subject_id",
+        "subject_name",
+        "pass_ratio",
+        "excellent_ratio"
+      ],
+      "sha256": "7d612384f2befa895d95779cf942eb708d93d199142b607915f01292da37c817"
+    },
+    "teaching_assignments": {
+      "row_count": 132,
+      "columns": [
+        "teaching_id",
+        "term_id",
+        "class_id",
+        "subject_id",
+        "teacher_id",
+        "weekly_periods"
+      ],
+      "sha256": "276833bc00c301c36dc31501a88656b2b0c80936bae3e3cbd3fa70468bf92cf7"
+    },
+    "academic_calendar": {
+      "row_count": 138,
+      "columns": [
+        "calendar_date",
+        "term_id",
+        "week_no",
+        "day_type",
+        "note"
+      ],
+      "sha256": "9acd0e14fff861cc23fee6f30243eb6d36296bdb64d55bf2dfbc5e12842e1b3d"
+    },
+    "lessons": {
+      "row_count": 7156,
+      "columns": [
+        "lesson_id",
+        "teaching_id",
+        "lesson_date",
+        "period_no",
+        "start_at",
+        "end_at"
+      ],
+      "sha256": "57e834f21e84ddb49b8bbd57023784602d90eb12bb870d0af51a9bff9589788d"
+    },
+    "attendance": {
+      "row_count": 310088,
+      "columns": [
+        "attendance_id",
+        "lesson_id",
+        "enrollment_id",
+        "attendance_status",
+        "late_minutes",
+        "reason"
+      ],
+      "sha256": "6cd12cef95894eb39897a8637e29cc84e88f1158bcd6bf2fa4477c3e40c1e46e"
+    },
+    "exams": {
+      "row_count": 66,
+      "columns": [
+        "exam_id",
+        "term_id",
+        "grade",
+        "subject_id",
+        "exam_name",
+        "exam_type",
+        "exam_date",
+        "start_at",
+        "duration_minutes",
+        "max_score"
+      ],
+      "sha256": "0a74ac1f75c8eabd737c3dfc698e2c4e07b4515c3ed77d4f7a6f470535118b2b"
+    },
+    "exam_results": {
+      "row_count": 17157,
+      "columns": [
+        "result_id",
+        "exam_id",
+        "enrollment_id",
+        "exam_status",
+        "score",
+        "absence_reason"
+      ],
+      "sha256": "d147dc9674fa887cd82b75f3eac871051c51ec195f209fb1b1e832be4d969a12"
+    },
+    "assignments": {
+      "row_count": 1121,
+      "columns": [
+        "assignment_id",
+        "teaching_id",
+        "assignment_title",
+        "assigned_at",
+        "due_at",
+        "max_score",
+        "estimated_minutes"
+      ],
+      "sha256": "8a2c86bd89c3b16087350a51ae41c79f993e3f46997ae0909072041b2076edda"
+    },
+    "assignment_submissions": {
+      "row_count": 48582,
+      "columns": [
+        "submission_id",
+        "assignment_id",
+        "enrollment_id",
+        "submission_status",
+        "submitted_at",
+        "graded_at",
+        "score"
+      ],
+      "sha256": "7c6176e3981aa2af0ef5f072daa6c46be397c50a3e3f7915b31ce271439e2eba"
+    },
+    "knowledge_points": {
+      "row_count": 110,
+      "columns": [
+        "knowledge_id",
+        "subject_id",
+        "grade",
+        "knowledge_name"
+      ],
+      "sha256": "5d9c7b2a7b3b56c132458c2ebf78bbd695555025577beeb3dee2877e27074dc7"
+    },
+    "exam_questions": {
+      "row_count": 1320,
+      "columns": [
+        "question_id",
+        "exam_id",
+        "knowledge_id",
+        "question_no",
+        "question_type",
+        "max_score"
+      ],
+      "sha256": "e561ce0f353b5b45f2100da6dc80740d90836168c0aeb854e0e8563ca390aaba"
+    },
+    "question_responses": {
+      "row_count": 333940,
+      "columns": [
+        "response_id",
+        "result_id",
+        "question_id",
+        "response_status",
+        "score"
+      ],
+      "sha256": "bf2db5619ec54b2765651f190ac92b5a7001ee9d222856332a2e81884260e842"
+    }
+  }
+}

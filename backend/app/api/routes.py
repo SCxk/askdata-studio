@@ -13,11 +13,11 @@ from ..models import (
     SchemaTable,
 )
 from ..security import AuthService, AuthUser
-from ..services.askdata_service import AskDataService
+from ..services.eduquery_service import EduQueryService
 
 
 router = APIRouter(prefix="/api")
-service = AskDataService()
+service = EduQueryService()
 auth_service = AuthService()
 
 

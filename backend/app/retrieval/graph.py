@@ -88,7 +88,7 @@ class SchemaGraphBuilder:
                 "label": self.tables[table_id]["label"],
                 "description": self.tables[table_id]["description"],
                 "domain": self.tables[table_id].get("domain", ""),
-                "database": self.tables[table_id].get("database", "short_video_ops"),
+                "database": self.tables[table_id].get("database", "school_teaching"),
             }
             for table_id in sorted(graph_tables)
             if table_id in self.tables

@@ -1,1 +1,1 @@
-"""AskData Studio backend tests."""
+"""EduQuery backend tests."""

@@ -120,7 +120,7 @@ class DuckDbEngine:
         database_tables = [
             table
             for table in SCHEMA
-            if table.get("database", "short_video_ops") == database
+            if table.get("database", "school_teaching") == database
         ]
         allowed = {
             physical_table_name(table): table["id"]

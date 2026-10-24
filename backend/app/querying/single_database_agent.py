@@ -5,7 +5,11 @@ import re
 from fnmatch import fnmatch
 from typing import Any, Callable
 
+import sqlglot
+from sqlglot import exp
+
 from ..errors import PipelineStageError
+from ..database import database_query_context
 from ..mcp_runtime.client import LocalMcpClient
 from ..model_client import ModelClient
 from ..skills import SkillDefinition
@@ -61,6 +65,9 @@ class SingleDatabaseAgent:
         base_payload = {
             "query": query,
             "database": database,
+            "database_context": database_query_context(
+                database, frozenset(access_scope.get("allowed_tables") or [])
+            ),
             "schema_graph": schema_graph,
             "retrieval": {
                 "threshold": retrieval.get("threshold"),
@@ -161,10 +168,36 @@ class SingleDatabaseAgent:
             if not validation_error:
                 validation_error = self._explicit_filter_error(decision, payload)
             if not validation_error:
+                validation_error = self._academic_term_error(decision, payload)
+            if not validation_error:
                 return decision
             if attempt == 2:
                 raise ValueError(validation_error)
         raise ValueError(validation_error)
+
+    @staticmethod
+    def _academic_term_error(decision: dict[str, Any], payload: dict[str, Any]) -> str:
+        context = payload.get("database_context") or {}
+        term = context.get("default_term")
+        query = str(payload.get("query") or "")
+        if not term or not any(word in query for word in ("本学期", "当前学期", "这个学期")):
+            return ""
+        if any(word in query for word in ("本月", "今天", "本周", "当前月")):
+            return ""
+        if decision.get("action") != "call_tool" or not str(decision.get("tool_name") or "").startswith("query_"):
+            return ""
+        sql = str((decision.get("arguments") or {}).get("sql") or "")
+        try:
+            tree = sqlglot.parse_one(sql, read="duckdb")
+        except sqlglot.errors.ParseError:
+            return ""
+        if tree is not None and any(isinstance(node, (exp.CurrentDate, exp.CurrentTimestamp)) for node in tree.walk()):
+            return (
+                f"本学期指数据中的学期 {term['term_id']}（{term['start_date']}至{term['end_date']}），"
+                "不能用CURRENT_DATE或CURRENT_TIMESTAMP寻找包含今天的学期。"
+                "请按该term_id关联，或直接使用该学期的起止日期。"
+            )
+        return ""
 
     def _decision_error(self, decision: dict[str, Any], tool_names: set[str]) -> str:
         action = str(decision.get("action") or "")

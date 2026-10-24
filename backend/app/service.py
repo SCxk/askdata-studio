@@ -1,5 +1,7 @@
 """兼容旧版服务导入路径。"""
 
-from .services.askdata_service import AskDataService
+from .services.eduquery_service import EduQueryService
 
-__all__ = ["AskDataService"]
+AskDataService = EduQueryService
+
+__all__ = ["EduQueryService", "AskDataService"]

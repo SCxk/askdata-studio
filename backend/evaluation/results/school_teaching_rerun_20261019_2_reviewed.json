@@ -1,0 +1,442 @@
+{
+  "source_report": "evaluation\\results\\school_teaching_rerun_20261019_2.json",
+  "source_sha256": "f14faf2425ff0d08288bf9580e9acfe9138ed55a8d162ed2a70c835118a4724f",
+  "mapping_sha256": "dc5592a60c74e2b2676a163ffe708d8b04edc2e5b4d1aa70b036bc84ce910761",
+  "review_method": "Agent inspected SQL projections for explicitly recorded synonymous labels; same comparator, same rows and tolerances; no model rerun, no data edits, no numeric corrections. Not independent human annotation.",
+  "summary": {
+    "case_count": 40,
+    "strict_correct_count": 33,
+    "strict_result_accuracy": 0.825,
+    "alias_review_count": 7,
+    "alias_only_corrected_count": 7,
+    "reviewed_correct_count": 40,
+    "reviewed_result_accuracy": 1.0,
+    "infrastructure_blocked_count": 0,
+    "infrastructure_blocked_ids": [],
+    "capability_benchmark_complete": true,
+    "retrieval_completed_count": 40,
+    "retrieval_completed_gold_fields": 338,
+    "schema_recall_given_completed_retrieval": 0.6923076923076923,
+    "sql_attempted_case_count": 40,
+    "sql_success_given_attempted_sql": 1.0,
+    "first_sql_success_given_attempted_sql": 0.625,
+    "reviewed_accuracy_given_executed_sql": 1.0
+  },
+  "original_summary": {
+    "case_count": 40,
+    "gold_field_count": 338,
+    "recalled_field_count": 234,
+    "schema_recall_micro": 0.6923076923076923,
+    "schema_recall_macro": 0.7257550782550782,
+    "expanded_recall_micro": 0.8461538461538461,
+    "retrieval_completed": 40,
+    "sql_success_count": 40,
+    "sql_execution_success_rate": 1.0,
+    "first_sql_success_count": 25,
+    "correct_count": 33,
+    "result_accuracy": 0.825,
+    "result_accuracy_given_executed_sql": 0.825,
+    "response_status_counts": {
+      "completed": 40
+    },
+    "exception_count": 0,
+    "mean_seconds": 23.2014
+  },
+  "cases": [
+    {
+      "case_id": "EDU-001",
+      "category": "成绩",
+      "query": "八年级期中数学各班平均分是多少？输出班级名称、平均分，按原始满分计，排除缺考。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "班级名称": "班级"
+        },
+        "basis": "生成SQL将c.class_name投影为班级；数学期中平均原始分仍按相同容差比较，不更改缺考筛选或分数。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-002",
+      "category": "成绩",
+      "query": "七年级期末英语各班及格率是多少？输出班级名称、及格率，及格线为满分的60%，分母为实考人数，比率用0到1。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "班级名称": "班级"
+        },
+        "basis": "生成SQL将c.class_name投影为班级，与参考班级名称为同一物理字段；及格率表达式及结果不作修改。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-003",
+      "category": "成绩",
+      "query": "各年级期中考试缺考记录有多少条？输出年级、缺考人次。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-004",
+      "category": "成绩",
+      "query": "九年级期末物理原始成绩最高的前5名是谁？输出学号、姓名、成绩；成绩降序，同分按学号升序。排除缺考。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-005",
+      "category": "成绩",
+      "query": "八年级期末各学科平均得分率是多少？输出学科名称、平均得分率，先算每个实考学生的成绩除以该考试满分，再求平均，用0到1。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-006",
+      "category": "成绩",
+      "query": "八年级各班数学从期中到期末平均原始分提高了多少？输出班级名称、期中平均分、期末平均分、提升分数；各次考试分别排除缺考。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-007",
+      "category": "成绩",
+      "query": "七年级期中语文各班实考人数和应考人数分别是多少？只输出班级名称、实考人数、应考人数。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "班级名称": "班级"
+        },
+        "basis": "生成SQL将c.class_name投影为班级；实考人数和应考人数保持原始返回值，逐行检查整数一致。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-008",
+      "category": "成绩",
+      "query": "2026年9月举行了多少场考试？输出考试场次。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-009",
+      "category": "考勤",
+      "query": "本学期每月出勤率是多少？输出月份（YYYY-MM）、出勤率；出勤含正常和迟到，分母含请假和缺勤，用0到1。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-010",
+      "category": "考勤",
+      "query": "2026年3月各年级迟到人次是多少？输出年级、迟到人次。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-011",
+      "category": "考勤",
+      "query": "全学期各班请假人次是多少？只输出班级名称、请假人次。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-012",
+      "category": "考勤",
+      "query": "全学期各年级迟到记录的平均迟到分钟数是多少？只统计迟到，输出年级、平均迟到分钟数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-013",
+      "category": "考勤",
+      "query": "全学期缺勤（absent）人次最多的前5个班级是什么？输出班级名称、缺勤人次；人次降序，同值按班级名称升序。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-014",
+      "category": "考勤",
+      "query": "2026年4月各班出勤率是多少？输出班级名称、出勤率；正常和迟到算出勤，所有应到记录作分母，用0到1。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "班级名称": "班级"
+        },
+        "basis": "生成SQL将c.class_name投影为班级；时间范围及出勤率不变，不修改分母、数值或记录。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-015",
+      "category": "考勤",
+      "query": "全学期按考勤状态统计课堂考勤记录数，输出考勤状态（原始英文编码）、记录数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-016",
+      "category": "考勤",
+      "query": "2026年9月各班有多少条考勤记录？输出班级名称、记录数；仅返回有记录的班级。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-017",
+      "category": "作业",
+      "query": "本学期各班作业完成率和按时提交率是多少？输出班级名称、完成率、按时提交率；分母包括未交，补交算完成，比率用0到1。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-018",
+      "category": "作业",
+      "query": "各年级作业未交人次是多少？只输出年级、未交人次。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-019",
+      "category": "作业",
+      "query": "2026年3月各学科布置了多少份作业？按布置时间筛选，输出学科名称、作业份数，每份作业只算一次。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-020",
+      "category": "作业",
+      "query": "八年级各班数学作业的已批改平均原始分是多少？排除无成绩记录，输出班级名称、平均分。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-021",
+      "category": "作业",
+      "query": "全学期各学科作业平均预计用时是多少分钟？每份作业等权，输出学科名称、平均预计分钟数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-022",
+      "category": "作业",
+      "query": "全学期补交（late）作业人次最多的前5个班级是什么？输出班级名称、补交人次；人次降序，同值按班级名称升序。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-023",
+      "category": "作业",
+      "query": "各年级英语作业完成率是多少？输出年级、完成率，按时和补交算完成，全部应交记录作分母，用0到1。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-024",
+      "category": "作业",
+      "query": "本学期按提交状态统计作业应交记录数，输出提交状态（原始英文编码）、记录数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-025",
+      "category": "知识点",
+      "query": "八年级期中数学各知识点得分率是多少？输出知识点名称、得分率，以学生题目总得分除以对应题目总满分，用0到1，包含缺考答题记录。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-026",
+      "category": "知识点",
+      "query": "七年级期末英语得分率最低的3个知识点是什么？输出知识点名称、得分率；总得分除以对应总满分，包含缺考记录，用0到1，按得分率升序，同值按知识点名称升序。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-027",
+      "category": "知识点",
+      "query": "九年级期中物理试卷按题型统计题目数和总满分，输出题型（原始编码）、题目数、总满分。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-028",
+      "category": "知识点",
+      "query": "各学科各年级配置了多少个知识点？输出学科名称、年级、知识点数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-029",
+      "category": "知识点",
+      "query": "八年级期末数学答题记录按作答状态统计数量，输出作答状态（原始编码）、记录数。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "记录数": "记录数量"
+        },
+        "basis": "生成SQL按response_status分组并将COUNT(*)投影为记录数量；与参考记录数同义，作答状态和数量保持原值。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-030",
+      "category": "知识点",
+      "query": "七年级期中数学试卷按知识点统计题目数，输出知识点名称、题目数；每道题只算一次。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "题目数": "题目数量"
+        },
+        "basis": "生成SQL将COUNT(DISTINCT eq.question_id)投影为题目数量，每道题只计一次；与参考按知识点计题目数同义，未调整任何数量。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-031",
+      "category": "知识点",
+      "query": "九年级期末化学各知识点的应答记录数和满分总和是多少？输出知识点名称、应答记录数、满分总和；包含缺考记录，每条学生答题记录对应一次题目满分。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-032",
+      "category": "知识点",
+      "query": "七年级期末语文各题型平均每条答题记录得分是多少？输出题型（原始编码）、平均得分，SQL平均值排除空分数。",
+      "strict_correct": false,
+      "reviewed_correct": true,
+      "reviewed_aliases": {
+        "aliases": {
+          "题型": "题型原始编码"
+        },
+        "basis": "生成SQL将eq.question_type投影为题型原始编码，符合问题要求的原始题型编码；平均得分表达式及返回数值保持不变。"
+      },
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-033",
+      "category": "教学安排",
+      "query": "本学期各年级在籍学生有多少人？输出年级、学生人数，按本学期学籍记录统计。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-034",
+      "category": "教学安排",
+      "query": "列出本学期所有班级的班主任，只输出班级名称、班主任姓名。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-035",
+      "category": "教学安排",
+      "query": "本学期八年级各班数学任课教师是谁，每周几课时？只输出班级名称、教师姓名、周课时数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-036",
+      "category": "教学安排",
+      "query": "本学期每月实际排课多少节？输出月份（YYYY-MM）、课节数，按课节日期分组。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-037",
+      "category": "教学安排",
+      "query": "教师按职称统计人数和平均教龄，只输出职称、教师人数、平均教龄。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-038",
+      "category": "教学安排",
+      "query": "本学期各班男女学生分别有多少人？输出班级名称、性别（原始编码）、学生人数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-039",
+      "category": "教学安排",
+      "query": "本学期校历按日期类型统计天数，输出日期类型（原始编码）、天数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    },
+    {
+      "case_id": "EDU-040",
+      "category": "教学安排",
+      "query": "本学期各学科实际排课多少节？输出学科名称、课节数。",
+      "strict_correct": true,
+      "reviewed_correct": true,
+      "reviewed_aliases": null,
+      "comparison_reason": "结果一致"
+    }
+  ]
+}

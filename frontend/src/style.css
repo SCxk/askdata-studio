@@ -43,6 +43,8 @@ button { cursor: pointer; }
   grid-template-columns: minmax(360px, .9fr) minmax(460px, 1.1fr);
   width: 100vw;
   min-height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
   background: #f7f9f7;
 }
 .login-intro {

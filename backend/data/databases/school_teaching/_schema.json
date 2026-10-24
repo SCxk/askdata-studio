@@ -1,0 +1,3156 @@
+{
+  "schema_version": "1.0.0",
+  "database": "school_teaching",
+  "scenario": "学校教学与学情分析（完全合成数据）",
+  "synthetic": true,
+  "metric_definitions": {
+    "平均分": "仅exam_status='attended'的成绩参与AVG(score)；缺考保持NULL，不补零。跨不同满分试卷用100*score/max_score；标准分只消除满分差异，不消除难度差异。",
+    "及格率": "同一统计范围内，实考且score/max_score>=subjects.pass_ratio的人次 / 实考人次。跨学科分母为考试人次，不能标成学生人数。",
+    "优秀率": "实考且score/max_score>=subjects.excellent_ratio的人次 / 实考人次。",
+    "出勤率": "(present课次人次+late课次人次)/全部应到课次人次；请假和无故缺勤均计入应到分母。分母剔除请假的指标必须另称扣除请假出勤率。",
+    "迟到率": "late课次人次/全部应到课次人次。",
+    "作业完成率": "(on_time记录数+late记录数)/全部应交记录数；missing记录保留在分母。",
+    "按时提交率": "on_time记录数/全部应交记录数。",
+    "知识点得分率": "SUM(question_responses.score)/SUM(exam_questions.max_score)，仅包括实际参考学生。不是学习能力或因果效果的测量。",
+    "进步幅度": "同一学生同一学科两轮均实考时的百分制得分差；不同试卷未做等值处理，只作描述比较，不能直接归因于教师。"
+  },
+  "role_tables": {
+    "academic_admin": [
+      "schools",
+      "terms",
+      "teachers",
+      "classes",
+      "students",
+      "enrollments",
+      "subjects",
+      "teaching_assignments",
+      "academic_calendar",
+      "lessons",
+      "attendance",
+      "exams",
+      "exam_results",
+      "assignments",
+      "assignment_submissions",
+      "knowledge_points",
+      "exam_questions",
+      "question_responses"
+    ]
+  },
+  "tables": [
+    {
+      "id": "school_teaching.schools",
+      "name": "schools",
+      "database": "school_teaching",
+      "label": "学校",
+      "domain": "教学基础",
+      "description": "学校；粒度：一所虚构学校。",
+      "business_terms": [
+        "学校",
+        "教学基础"
+      ],
+      "primary_key": [
+        "school_id"
+      ],
+      "row_count": 1,
+      "fields": [
+        {
+          "name": "school_id",
+          "label": "学校编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "学校唯一标识",
+          "aliases": [
+            "学校编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "SCH001"
+            ]
+          }
+        },
+        {
+          "name": "school_name",
+          "label": "学校名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "明确标注为模拟学校",
+          "aliases": [
+            "学校名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "明川实验中学（模拟）"
+            ]
+          }
+        },
+        {
+          "name": "city",
+          "label": "所在城市",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "模拟学校所在城市",
+          "aliases": [
+            "所在城市"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "杭州"
+            ]
+          }
+        },
+        {
+          "name": "school_type",
+          "label": "办学类型",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "初中",
+          "aliases": [
+            "办学类型"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "初中"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.terms",
+      "name": "terms",
+      "database": "school_teaching",
+      "label": "学期",
+      "domain": "教学基础",
+      "description": "学期；粒度：学校的一个学期。",
+      "business_terms": [
+        "学期",
+        "教学基础"
+      ],
+      "primary_key": [
+        "term_id"
+      ],
+      "row_count": 1,
+      "fields": [
+        {
+          "name": "term_id",
+          "label": "学期编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "学期唯一标识",
+          "aliases": [
+            "学期编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "T2025_2026_2"
+            ]
+          }
+        },
+        {
+          "name": "school_id",
+          "label": "学校编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学校",
+          "aliases": [
+            "学校编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "SCH001"
+            ]
+          }
+        },
+        {
+          "name": "academic_year",
+          "label": "学年",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "跨自然年的学年",
+          "aliases": [
+            "学年"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "2025-2026"
+            ]
+          }
+        },
+        {
+          "name": "term_name",
+          "label": "学期名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "学校教学学期",
+          "aliases": [
+            "学期名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "2025-2026学年第二学期"
+            ]
+          }
+        },
+        {
+          "name": "start_date",
+          "label": "开学日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "学期起始日期",
+          "aliases": [
+            "开学日期"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "2026-02-23"
+            ],
+            "min": "2026-02-23",
+            "max": "2026-02-23"
+          }
+        },
+        {
+          "name": "end_date",
+          "label": "结束日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "学期结束日期",
+          "aliases": [
+            "结束日期"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "2026-07-10"
+            ],
+            "min": "2026-07-10",
+            "max": "2026-07-10"
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.teachers",
+      "name": "teachers",
+      "database": "school_teaching",
+      "label": "教师",
+      "domain": "教学基础",
+      "description": "教师；粒度：一位虚构教师。",
+      "business_terms": [
+        "教师",
+        "教学基础"
+      ],
+      "primary_key": [
+        "teacher_id"
+      ],
+      "row_count": 66,
+      "fields": [
+        {
+          "name": "teacher_id",
+          "label": "教师编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "教师唯一标识",
+          "aliases": [
+            "教师编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 66,
+            "sample_values": [
+              "T7BIO1",
+              "T7BIO2",
+              "T7BIO3",
+              "T7CHN1",
+              "T7CHN2"
+            ]
+          }
+        },
+        {
+          "name": "school_id",
+          "label": "学校编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学校",
+          "aliases": [
+            "学校编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "SCH001"
+            ]
+          }
+        },
+        {
+          "name": "teacher_name",
+          "label": "教师姓名",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "随机合成姓名，无真实人员对应",
+          "aliases": [
+            "教师姓名"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 66,
+            "sample_values": [
+              "严宇航",
+              "严文博",
+              "严昕悦",
+              "严梓萱",
+              "何一诺"
+            ]
+          }
+        },
+        {
+          "name": "teaching_years",
+          "label": "教龄",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "模拟教龄，不用于推断教学效果",
+          "aliases": [
+            "教龄"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 25,
+            "sample_values": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "min": 2,
+            "max": 27,
+            "avg": 12.9242
+          }
+        },
+        {
+          "name": "title",
+          "label": "职称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "与教龄大致相符的模拟职称",
+          "aliases": [
+            "职称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              "一级教师",
+              "二级教师",
+              "高级教师"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.classes",
+      "name": "classes",
+      "database": "school_teaching",
+      "label": "行政班",
+      "domain": "教学基础",
+      "description": "行政班；粒度：学期内的一个行政班。",
+      "business_terms": [
+        "行政班",
+        "教学基础"
+      ],
+      "primary_key": [
+        "class_id"
+      ],
+      "row_count": 18,
+      "fields": [
+        {
+          "name": "class_id",
+          "label": "班级编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "班级唯一标识",
+          "aliases": [
+            "班级编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 18,
+            "null_ratio": 0.0,
+            "distinct_count": 18,
+            "sample_values": [
+              "C701",
+              "C702",
+              "C703",
+              "C704",
+              "C705"
+            ]
+          }
+        },
+        {
+          "name": "school_id",
+          "label": "学校编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学校",
+          "aliases": [
+            "学校编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 18,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "SCH001"
+            ]
+          }
+        },
+        {
+          "name": "term_id",
+          "label": "学期编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "班级所属学期",
+          "aliases": [
+            "学期编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 18,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "T2025_2026_2"
+            ]
+          }
+        },
+        {
+          "name": "grade",
+          "label": "年级",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "7、8、9分别表示七、八、九年级",
+          "aliases": [
+            "年级"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 18,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              7,
+              8,
+              9
+            ],
+            "min": 7,
+            "max": 9,
+            "avg": 8.0
+          }
+        },
+        {
+          "name": "class_name",
+          "label": "班级名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "普通平行班，没有重点班标签",
+          "aliases": [
+            "班级名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 18,
+            "null_ratio": 0.0,
+            "distinct_count": 18,
+            "sample_values": [
+              "七年级1班",
+              "七年级2班",
+              "七年级3班",
+              "七年级4班",
+              "七年级5班"
+            ]
+          }
+        },
+        {
+          "name": "homeroom_teacher_id",
+          "label": "班主任编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "班主任同时是本班的一名任课教师",
+          "aliases": [
+            "班主任编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 18,
+            "null_ratio": 0.0,
+            "distinct_count": 18,
+            "sample_values": [
+              "T7CHN1",
+              "T7CHN2",
+              "T7ENG2",
+              "T7ENG3",
+              "T7MAT1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.students",
+      "name": "students",
+      "database": "school_teaching",
+      "label": "学生",
+      "domain": "教学基础",
+      "description": "学生；粒度：一位虚构学生。",
+      "business_terms": [
+        "学生",
+        "教学基础"
+      ],
+      "primary_key": [
+        "student_id"
+      ],
+      "row_count": 780,
+      "fields": [
+        {
+          "name": "student_id",
+          "label": "学号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "合成学号，不是真实学籍号",
+          "aliases": [
+            "学号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "S00001",
+              "S00002",
+              "S00003",
+              "S00004",
+              "S00005"
+            ]
+          }
+        },
+        {
+          "name": "school_id",
+          "label": "学校编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学校",
+          "aliases": [
+            "学校编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "SCH001"
+            ]
+          }
+        },
+        {
+          "name": "student_name",
+          "label": "学生姓名",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "随机合成姓名，无真实人员对应",
+          "aliases": [
+            "学生姓名"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "严乐言",
+              "严俊杰",
+              "严博文",
+              "严可欣",
+              "严子涵"
+            ]
+          }
+        },
+        {
+          "name": "gender",
+          "label": "性别",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "模拟基本信息，不参与能力和成绩生成",
+          "aliases": [
+            "性别"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              "女",
+              "男"
+            ]
+          }
+        },
+        {
+          "name": "birth_date",
+          "label": "出生日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "与年级相符的合成日期",
+          "aliases": [
+            "出生日期"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 545,
+            "sample_values": [
+              "2010-09-05",
+              "2010-09-08",
+              "2010-09-11",
+              "2010-09-16",
+              "2010-09-17"
+            ],
+            "min": "2010-09-05",
+            "max": "2013-08-30"
+          }
+        },
+        {
+          "name": "enrollment_year",
+          "label": "入学年份",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "该学生进入七年级的年份",
+          "aliases": [
+            "入学年份"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              2023,
+              2024,
+              2025
+            ],
+            "min": 2023,
+            "max": 2025,
+            "avg": 2024.0038
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.enrollments",
+      "name": "enrollments",
+      "database": "school_teaching",
+      "label": "学期班级学籍",
+      "domain": "教学基础",
+      "description": "学期班级学籍；粒度：学生在学期内的一段班级归属。",
+      "business_terms": [
+        "学期班级学籍",
+        "教学基础"
+      ],
+      "primary_key": [
+        "enrollment_id"
+      ],
+      "row_count": 780,
+      "fields": [
+        {
+          "name": "enrollment_id",
+          "label": "学籍记录编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "学籍记录唯一标识",
+          "aliases": [
+            "学籍记录编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "EN00001",
+              "EN00002",
+              "EN00003",
+              "EN00004",
+              "EN00005"
+            ]
+          }
+        },
+        {
+          "name": "student_id",
+          "label": "学号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学生",
+          "aliases": [
+            "学号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "S00001",
+              "S00002",
+              "S00003",
+              "S00004",
+              "S00005"
+            ]
+          }
+        },
+        {
+          "name": "class_id",
+          "label": "班级编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "该时段所在行政班",
+          "aliases": [
+            "班级编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 18,
+            "sample_values": [
+              "C701",
+              "C702",
+              "C703",
+              "C704",
+              "C705"
+            ]
+          }
+        },
+        {
+          "name": "term_id",
+          "label": "学期编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学期",
+          "aliases": [
+            "学期编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "T2025_2026_2"
+            ]
+          }
+        },
+        {
+          "name": "valid_from",
+          "label": "归属开始日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "包含起始日",
+          "aliases": [
+            "归属开始日期"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "2026-02-23"
+            ],
+            "min": "2026-02-23",
+            "max": "2026-02-23"
+          }
+        },
+        {
+          "name": "valid_to",
+          "label": "归属结束日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "包含结束日；九年级6月17日结课，其他年级7月10日结课；没有学期中转班",
+          "aliases": [
+            "归属结束日期"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 780,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              "2026-06-17",
+              "2026-07-10"
+            ],
+            "min": "2026-06-17",
+            "max": "2026-07-10"
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.subjects",
+      "name": "subjects",
+      "database": "school_teaching",
+      "label": "学科",
+      "domain": "教学基础",
+      "description": "学科；粒度：一门学科。",
+      "business_terms": [
+        "学科",
+        "教学基础"
+      ],
+      "primary_key": [
+        "subject_id"
+      ],
+      "row_count": 9,
+      "fields": [
+        {
+          "name": "subject_id",
+          "label": "学科编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "学科唯一标识",
+          "aliases": [
+            "学科编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 9,
+            "null_ratio": 0.0,
+            "distinct_count": 9,
+            "sample_values": [
+              "BIO",
+              "CHE",
+              "CHN",
+              "ENG",
+              "GEO"
+            ]
+          }
+        },
+        {
+          "name": "subject_name",
+          "label": "学科名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "语文、数学、英语等",
+          "aliases": [
+            "学科名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 9,
+            "null_ratio": 0.0,
+            "distinct_count": 9,
+            "sample_values": [
+              "化学",
+              "历史",
+              "地理",
+              "数学",
+              "物理"
+            ]
+          }
+        },
+        {
+          "name": "pass_ratio",
+          "label": "及格分数比例",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "得分/满分达到0.6视为及格",
+          "aliases": [
+            "及格分数比例"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 9,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              0.6
+            ],
+            "min": 0.6,
+            "max": 0.6,
+            "avg": 0.6
+          }
+        },
+        {
+          "name": "excellent_ratio",
+          "label": "优秀分数比例",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "得分/满分达到0.85视为优秀",
+          "aliases": [
+            "优秀分数比例"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 9,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              0.85
+            ],
+            "min": 0.85,
+            "max": 0.85,
+            "avg": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.teaching_assignments",
+      "name": "teaching_assignments",
+      "database": "school_teaching",
+      "label": "任课安排",
+      "domain": "课程教学",
+      "description": "任课安排；粒度：学期内教师对一个班级一门学科的任课安排。",
+      "business_terms": [
+        "任课安排",
+        "课程教学"
+      ],
+      "primary_key": [
+        "teaching_id"
+      ],
+      "row_count": 132,
+      "fields": [
+        {
+          "name": "teaching_id",
+          "label": "任课编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "任课安排唯一标识",
+          "aliases": [
+            "任课编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 132,
+            "null_ratio": 0.0,
+            "distinct_count": 132,
+            "sample_values": [
+              "TA_C701_BIO",
+              "TA_C701_CHN",
+              "TA_C701_ENG",
+              "TA_C701_GEO",
+              "TA_C701_HIS"
+            ]
+          }
+        },
+        {
+          "name": "term_id",
+          "label": "学期编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学期",
+          "aliases": [
+            "学期编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 132,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "T2025_2026_2"
+            ]
+          }
+        },
+        {
+          "name": "class_id",
+          "label": "班级编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "授课班级",
+          "aliases": [
+            "班级编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 132,
+            "null_ratio": 0.0,
+            "distinct_count": 18,
+            "sample_values": [
+              "C701",
+              "C702",
+              "C703",
+              "C704",
+              "C705"
+            ]
+          }
+        },
+        {
+          "name": "subject_id",
+          "label": "学科编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "授课学科",
+          "aliases": [
+            "学科编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 132,
+            "null_ratio": 0.0,
+            "distinct_count": 9,
+            "sample_values": [
+              "BIO",
+              "CHE",
+              "CHN",
+              "ENG",
+              "GEO"
+            ]
+          }
+        },
+        {
+          "name": "teacher_id",
+          "label": "教师编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "任课教师",
+          "aliases": [
+            "教师编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 132,
+            "null_ratio": 0.0,
+            "distinct_count": 66,
+            "sample_values": [
+              "T7BIO1",
+              "T7BIO2",
+              "T7BIO3",
+              "T7CHN1",
+              "T7CHN2"
+            ]
+          }
+        },
+        {
+          "name": "weekly_periods",
+          "label": "每周课时",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "仅覆盖本数据中的文化课程，不代表完整课表",
+          "aliases": [
+            "每周课时"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 132,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              2,
+              3,
+              5
+            ],
+            "min": 2,
+            "max": 5,
+            "avg": 3.3636
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.academic_calendar",
+      "name": "academic_calendar",
+      "database": "school_teaching",
+      "label": "教学日历",
+      "domain": "课程教学",
+      "description": "教学日历；粒度：学期内的一个自然日。",
+      "business_terms": [
+        "教学日历",
+        "课程教学"
+      ],
+      "primary_key": [
+        "calendar_date"
+      ],
+      "row_count": 138,
+      "fields": [
+        {
+          "name": "calendar_date",
+          "label": "日历日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "日期唯一键",
+          "aliases": [
+            "日历日期"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 138,
+            "null_ratio": 0.0,
+            "distinct_count": 138,
+            "sample_values": [
+              "2026-02-23",
+              "2026-02-24",
+              "2026-02-25",
+              "2026-02-26",
+              "2026-02-27"
+            ],
+            "min": "2026-02-23",
+            "max": "2026-07-10"
+          }
+        },
+        {
+          "name": "term_id",
+          "label": "学期编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学期",
+          "aliases": [
+            "学期编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 138,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "T2025_2026_2"
+            ]
+          }
+        },
+        {
+          "name": "week_no",
+          "label": "教学周",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "从开学周起连续编号，假期不重置",
+          "aliases": [
+            "教学周"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 138,
+            "null_ratio": 0.0,
+            "distinct_count": 20,
+            "sample_values": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "min": 1,
+            "max": 20,
+            "avg": 10.3623
+          }
+        },
+        {
+          "name": "day_type",
+          "label": "日期类型",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "teaching教学日、exam有年级考试的教学日、holiday假日、weekend周末；非参考年级照常上课",
+          "aliases": [
+            "日期类型"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 138,
+            "null_ratio": 0.0,
+            "distinct_count": 4,
+            "sample_values": [
+              "exam",
+              "holiday",
+              "teaching",
+              "weekend"
+            ]
+          }
+        },
+        {
+          "name": "note",
+          "label": "日历备注",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "虚构学校的校历设定，不是官方放假安排",
+          "aliases": [
+            "日历备注"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 138,
+            "null_ratio": 0.0,
+            "distinct_count": 6,
+            "sample_values": [
+              "分年级考试；非参考年级照常上课",
+              "劳动节假期",
+              "周末",
+              "文化课教学",
+              "清明假期"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.lessons",
+      "name": "lessons",
+      "database": "school_teaching",
+      "label": "课次",
+      "domain": "课程教学",
+      "description": "课次；粒度：一个班级一次实际排定的学科课堂。",
+      "business_terms": [
+        "课次",
+        "课程教学"
+      ],
+      "primary_key": [
+        "lesson_id"
+      ],
+      "row_count": 7156,
+      "fields": [
+        {
+          "name": "lesson_id",
+          "label": "课次编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "课次唯一标识",
+          "aliases": [
+            "课次编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 7156,
+            "null_ratio": 0.0,
+            "distinct_count": 7156,
+            "sample_values": [
+              "L000001",
+              "L000002",
+              "L000003",
+              "L000004",
+              "L000005"
+            ]
+          }
+        },
+        {
+          "name": "teaching_id",
+          "label": "任课编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "通过任课安排关联班级、学科和教师",
+          "aliases": [
+            "任课编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 7156,
+            "null_ratio": 0.0,
+            "distinct_count": 132,
+            "sample_values": [
+              "TA_C701_BIO",
+              "TA_C701_CHN",
+              "TA_C701_ENG",
+              "TA_C701_GEO",
+              "TA_C701_HIS"
+            ]
+          }
+        },
+        {
+          "name": "lesson_date",
+          "label": "上课日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "教学日上课，参考年级考试当天暂停常规课",
+          "aliases": [
+            "上课日期"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 7156,
+            "null_ratio": 0.0,
+            "distinct_count": 86,
+            "sample_values": [
+              "2026-02-23",
+              "2026-02-24",
+              "2026-02-25",
+              "2026-02-26",
+              "2026-02-27"
+            ],
+            "min": "2026-02-23",
+            "max": "2026-07-10"
+          }
+        },
+        {
+          "name": "period_no",
+          "label": "节次",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "一天第1至7节；未包含体育、艺术等课程",
+          "aliases": [
+            "节次"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 7156,
+            "null_ratio": 0.0,
+            "distinct_count": 7,
+            "sample_values": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "min": 1,
+            "max": 7,
+            "avg": 4.0572
+          }
+        },
+        {
+          "name": "start_at",
+          "label": "上课时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "课堂开始时间",
+          "aliases": [
+            "上课时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 7156,
+            "null_ratio": 0.0,
+            "distinct_count": 602,
+            "sample_values": [
+              "2026-02-23 08:00:00",
+              "2026-02-23 08:55:00",
+              "2026-02-23 10:00:00",
+              "2026-02-23 10:55:00",
+              "2026-02-23 14:00:00"
+            ],
+            "min": "2026-02-23 08:00:00",
+            "max": "2026-07-10 15:50:00"
+          }
+        },
+        {
+          "name": "end_at",
+          "label": "下课时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "课堂结束时间；每节45分钟",
+          "aliases": [
+            "下课时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 7156,
+            "null_ratio": 0.0,
+            "distinct_count": 602,
+            "sample_values": [
+              "2026-02-23 08:45:00",
+              "2026-02-23 09:40:00",
+              "2026-02-23 10:45:00",
+              "2026-02-23 11:40:00",
+              "2026-02-23 14:45:00"
+            ],
+            "min": "2026-02-23 08:45:00",
+            "max": "2026-07-10 16:35:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.attendance",
+      "name": "attendance",
+      "database": "school_teaching",
+      "label": "课堂考勤",
+      "domain": "出勤分析",
+      "description": "课堂考勤；粒度：一名学生在一个课次的考勤。",
+      "business_terms": [
+        "课堂考勤",
+        "出勤分析"
+      ],
+      "primary_key": [
+        "attendance_id"
+      ],
+      "row_count": 310088,
+      "fields": [
+        {
+          "name": "attendance_id",
+          "label": "考勤编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "考勤唯一标识",
+          "aliases": [
+            "考勤编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 310088,
+            "null_ratio": 0.0,
+            "distinct_count": 310088,
+            "sample_values": [
+              "AT0000001",
+              "AT0000002",
+              "AT0000003",
+              "AT0000004",
+              "AT0000005"
+            ]
+          }
+        },
+        {
+          "name": "lesson_id",
+          "label": "课次编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属课堂",
+          "aliases": [
+            "课次编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 310088,
+            "null_ratio": 0.0,
+            "distinct_count": 7156,
+            "sample_values": [
+              "L000001",
+              "L000002",
+              "L000003",
+              "L000004",
+              "L000005"
+            ]
+          }
+        },
+        {
+          "name": "enrollment_id",
+          "label": "学籍记录编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "上课当天的班级归属",
+          "aliases": [
+            "学籍记录编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 310088,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "EN00001",
+              "EN00002",
+              "EN00003",
+              "EN00004",
+              "EN00005"
+            ]
+          }
+        },
+        {
+          "name": "attendance_status",
+          "label": "出勤状态",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "present到课、late迟到、excused请假、absent无故缺勤",
+          "aliases": [
+            "出勤状态"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 310088,
+            "null_ratio": 0.0,
+            "distinct_count": 4,
+            "sample_values": [
+              "absent",
+              "excused",
+              "late",
+              "present"
+            ]
+          }
+        },
+        {
+          "name": "late_minutes",
+          "label": "迟到分钟数",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "仅迟到时大于0，其余为0",
+          "aliases": [
+            "迟到分钟数"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 310088,
+            "null_ratio": 0.0,
+            "distinct_count": 19,
+            "sample_values": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "min": 0,
+            "max": 18,
+            "avg": 0.1249
+          }
+        },
+        {
+          "name": "reason",
+          "label": "考勤备注",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "请假及缺勤的模拟记录；正常到课留空",
+          "aliases": [
+            "考勤备注"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 310088,
+            "null_ratio": 0.964691,
+            "distinct_count": 4,
+            "sample_values": [
+              "事假",
+              "到校或课间返回延误",
+              "未履行请假手续",
+              "病假"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.exams",
+      "name": "exams",
+      "database": "school_teaching",
+      "label": "考试",
+      "domain": "学业成绩",
+      "description": "考试；粒度：年级在一轮考试中的一门学科试卷。",
+      "business_terms": [
+        "考试",
+        "学业成绩"
+      ],
+      "primary_key": [
+        "exam_id"
+      ],
+      "row_count": 66,
+      "fields": [
+        {
+          "name": "exam_id",
+          "label": "考试编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "同年级同学科使用同一份试卷",
+          "aliases": [
+            "考试编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 66,
+            "sample_values": [
+              "EX7_BIO_1",
+              "EX7_BIO_2",
+              "EX7_BIO_3",
+              "EX7_CHN_1",
+              "EX7_CHN_2"
+            ]
+          }
+        },
+        {
+          "name": "term_id",
+          "label": "学期编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学期",
+          "aliases": [
+            "学期编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              "T2025_2026_2"
+            ]
+          }
+        },
+        {
+          "name": "grade",
+          "label": "年级",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "考试面向的年级",
+          "aliases": [
+            "年级"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              7,
+              8,
+              9
+            ],
+            "min": 7,
+            "max": 9,
+            "avg": 8.0
+          }
+        },
+        {
+          "name": "subject_id",
+          "label": "学科编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "考试学科",
+          "aliases": [
+            "学科编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 9,
+            "sample_values": [
+              "BIO",
+              "CHE",
+              "CHN",
+              "ENG",
+              "GEO"
+            ]
+          }
+        },
+        {
+          "name": "exam_name",
+          "label": "考试名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "三月阶段测评、期中考试、期末考试",
+          "aliases": [
+            "考试名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 27,
+            "sample_values": [
+              "三月阶段测评·化学",
+              "三月阶段测评·历史",
+              "三月阶段测评·地理",
+              "三月阶段测评·数学",
+              "三月阶段测评·物理"
+            ]
+          }
+        },
+        {
+          "name": "exam_type",
+          "label": "考试类型",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "monthly、midterm、final",
+          "aliases": [
+            "考试类型"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              "final",
+              "midterm",
+              "monthly"
+            ]
+          }
+        },
+        {
+          "name": "exam_date",
+          "label": "考试日期",
+          "source_type": "DATE",
+          "type": "日期",
+          "description": "校历中为exam的日期",
+          "aliases": [
+            "考试日期"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 12,
+            "sample_values": [
+              "2026-03-25",
+              "2026-03-26",
+              "2026-03-27",
+              "2026-04-28",
+              "2026-04-29"
+            ],
+            "min": "2026-03-25",
+            "max": "2026-07-08"
+          }
+        },
+        {
+          "name": "start_at",
+          "label": "开考时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "同年级多学科考试不重叠",
+          "aliases": [
+            "开考时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 31,
+            "sample_values": [
+              "2026-03-25 08:00:00",
+              "2026-03-25 10:30:00",
+              "2026-03-25 14:00:00",
+              "2026-03-26 08:00:00",
+              "2026-03-26 10:30:00"
+            ],
+            "min": "2026-03-25 08:00:00",
+            "max": "2026-07-08 10:30:00"
+          }
+        },
+        {
+          "name": "duration_minutes",
+          "label": "考试时长",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "语数英120分钟，其他学科60分钟",
+          "aliases": [
+            "考试时长"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              60,
+              120
+            ],
+            "min": 60,
+            "max": 120,
+            "avg": 84.5455
+          }
+        },
+        {
+          "name": "max_score",
+          "label": "试卷满分",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "语数英120，其他学科100；以本字段为准",
+          "aliases": [
+            "试卷满分"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 66,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              100.0,
+              120.0
+            ],
+            "min": 100.0,
+            "max": 120.0,
+            "avg": 108.1818
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.exam_results",
+      "name": "exam_results",
+      "database": "school_teaching",
+      "label": "考试成绩",
+      "domain": "学业成绩",
+      "description": "考试成绩；粒度：学生参加一门考试的主考成绩。",
+      "business_terms": [
+        "考试成绩",
+        "学业成绩"
+      ],
+      "primary_key": [
+        "result_id"
+      ],
+      "row_count": 17157,
+      "fields": [
+        {
+          "name": "result_id",
+          "label": "成绩编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "成绩唯一标识",
+          "aliases": [
+            "成绩编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 17157,
+            "null_ratio": 0.0,
+            "distinct_count": 17157,
+            "sample_values": [
+              "ER000001",
+              "ER000002",
+              "ER000003",
+              "ER000004",
+              "ER000005"
+            ]
+          }
+        },
+        {
+          "name": "exam_id",
+          "label": "考试编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属考试",
+          "aliases": [
+            "考试编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 17157,
+            "null_ratio": 0.0,
+            "distinct_count": 66,
+            "sample_values": [
+              "EX7_BIO_1",
+              "EX7_BIO_2",
+              "EX7_BIO_3",
+              "EX7_CHN_1",
+              "EX7_CHN_2"
+            ]
+          }
+        },
+        {
+          "name": "enrollment_id",
+          "label": "学籍记录编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "考试日学生的班级归属",
+          "aliases": [
+            "学籍记录编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 17157,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "EN00001",
+              "EN00002",
+              "EN00003",
+              "EN00004",
+              "EN00005"
+            ]
+          }
+        },
+        {
+          "name": "exam_status",
+          "label": "参考状态",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "attended实考或absent缺考，缺考不按零分处理",
+          "aliases": [
+            "参考状态"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 17157,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              "absent",
+              "attended"
+            ]
+          }
+        },
+        {
+          "name": "score",
+          "label": "考试得分",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "等于逐题得分之和；缺考为空",
+          "aliases": [
+            "考试得分"
+          ],
+          "role": "metric",
+          "aggregation": "avg",
+          "data_profile": {
+            "row_count": 17157,
+            "null_ratio": 0.026811,
+            "distinct_count": 210,
+            "sample_values": [
+              10.0,
+              12.0,
+              12.5,
+              13.0,
+              14.5
+            ],
+            "min": 10.0,
+            "max": 119.0,
+            "avg": 74.3085
+          }
+        },
+        {
+          "name": "absence_reason",
+          "label": "缺考原因",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "仅缺考时填写，不生成补考成绩",
+          "aliases": [
+            "缺考原因"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 17157,
+            "null_ratio": 0.973189,
+            "distinct_count": 3,
+            "sample_values": [
+              "事假",
+              "未履行请假手续",
+              "病假"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.assignments",
+      "name": "assignments",
+      "database": "school_teaching",
+      "label": "作业布置",
+      "domain": "作业分析",
+      "description": "作业布置；粒度：给一个班级布置的一份学科作业。",
+      "business_terms": [
+        "作业布置",
+        "作业分析"
+      ],
+      "primary_key": [
+        "assignment_id"
+      ],
+      "row_count": 1121,
+      "fields": [
+        {
+          "name": "assignment_id",
+          "label": "作业编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "作业唯一标识",
+          "aliases": [
+            "作业编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 1121,
+            "sample_values": [
+              "HW00001",
+              "HW00002",
+              "HW00003",
+              "HW00004",
+              "HW00005"
+            ]
+          }
+        },
+        {
+          "name": "teaching_id",
+          "label": "任课编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "布置作业的任课关系",
+          "aliases": [
+            "任课编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 132,
+            "sample_values": [
+              "TA_C701_BIO",
+              "TA_C701_CHN",
+              "TA_C701_ENG",
+              "TA_C701_GEO",
+              "TA_C701_HIS"
+            ]
+          }
+        },
+        {
+          "name": "assignment_title",
+          "label": "作业名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "学科及教学周名称",
+          "aliases": [
+            "作业名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 80,
+            "sample_values": [
+              "化学第11周巩固作业",
+              "化学第13周巩固作业",
+              "化学第15周巩固作业",
+              "化学第1周巩固作业",
+              "化学第3周巩固作业"
+            ]
+          }
+        },
+        {
+          "name": "assigned_at",
+          "label": "布置时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "在该学科实际课堂结束后布置",
+          "aliases": [
+            "布置时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 195,
+            "sample_values": [
+              "2026-02-23 08:55:00",
+              "2026-02-23 09:50:00",
+              "2026-02-23 10:55:00",
+              "2026-02-23 11:50:00",
+              "2026-02-23 14:55:00"
+            ],
+            "min": "2026-02-23 08:55:00",
+            "max": "2026-06-18 16:45:00"
+          }
+        },
+        {
+          "name": "due_at",
+          "label": "截止时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "下一教学日20点",
+          "aliases": [
+            "截止时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 33,
+            "sample_values": [
+              "2026-02-24 20:00:00",
+              "2026-02-25 20:00:00",
+              "2026-02-26 20:00:00",
+              "2026-02-27 20:00:00",
+              "2026-03-10 20:00:00"
+            ],
+            "min": "2026-02-24 20:00:00",
+            "max": "2026-06-22 20:00:00"
+          }
+        },
+        {
+          "name": "max_score",
+          "label": "作业满分",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "满分100",
+          "aliases": [
+            "作业满分"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 1,
+            "sample_values": [
+              100.0
+            ],
+            "min": 100.0,
+            "max": 100.0,
+            "avg": 100.0
+          }
+        },
+        {
+          "name": "estimated_minutes",
+          "label": "预计完成分钟",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "单科一次作业预计时长",
+          "aliases": [
+            "预计完成分钟"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1121,
+            "null_ratio": 0.0,
+            "distinct_count": 16,
+            "sample_values": [
+              15,
+              16,
+              17,
+              18,
+              19
+            ],
+            "min": 15,
+            "max": 30,
+            "avg": 22.4817
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.assignment_submissions",
+      "name": "assignment_submissions",
+      "database": "school_teaching",
+      "label": "作业提交",
+      "domain": "作业分析",
+      "description": "作业提交；粒度：一名应交学生对一份作业的最终提交记录。",
+      "business_terms": [
+        "作业提交",
+        "作业分析"
+      ],
+      "primary_key": [
+        "submission_id"
+      ],
+      "row_count": 48582,
+      "fields": [
+        {
+          "name": "submission_id",
+          "label": "提交编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "提交记录唯一标识",
+          "aliases": [
+            "提交编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.0,
+            "distinct_count": 48582,
+            "sample_values": [
+              "HS0000001",
+              "HS0000002",
+              "HS0000003",
+              "HS0000004",
+              "HS0000005"
+            ]
+          }
+        },
+        {
+          "name": "assignment_id",
+          "label": "作业编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属作业",
+          "aliases": [
+            "作业编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.0,
+            "distinct_count": 1121,
+            "sample_values": [
+              "HW00001",
+              "HW00002",
+              "HW00003",
+              "HW00004",
+              "HW00005"
+            ]
+          }
+        },
+        {
+          "name": "enrollment_id",
+          "label": "学籍记录编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "应交学生；未交也保留一条记录作为分母",
+          "aliases": [
+            "学籍记录编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.0,
+            "distinct_count": 780,
+            "sample_values": [
+              "EN00001",
+              "EN00002",
+              "EN00003",
+              "EN00004",
+              "EN00005"
+            ]
+          }
+        },
+        {
+          "name": "submission_status",
+          "label": "提交状态",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "on_time按时、late迟交、missing未交",
+          "aliases": [
+            "提交状态"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              "late",
+              "missing",
+              "on_time"
+            ]
+          }
+        },
+        {
+          "name": "submitted_at",
+          "label": "提交时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "未交为空；迟交严格晚于截止时间",
+          "aliases": [
+            "提交时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.028838,
+            "distinct_count": 9001,
+            "sample_values": [
+              "2026-02-23 18:00:00",
+              "2026-02-23 18:01:00",
+              "2026-02-23 18:02:00",
+              "2026-02-23 18:03:00",
+              "2026-02-23 18:04:00"
+            ],
+            "min": "2026-02-23 18:00:00",
+            "max": "2026-06-24 14:27:00"
+          }
+        },
+        {
+          "name": "graded_at",
+          "label": "批改时间",
+          "source_type": "TIMESTAMP",
+          "type": "日期",
+          "description": "晚于提交时间，不超过学期结束",
+          "aliases": [
+            "批改时间"
+          ],
+          "role": "time",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.028838,
+            "distinct_count": 25767,
+            "sample_values": [
+              "2026-02-23 22:00:00",
+              "2026-02-23 22:02:00",
+              "2026-02-23 22:03:00",
+              "2026-02-23 22:04:00",
+              "2026-02-23 22:05:00"
+            ],
+            "min": "2026-02-23 22:00:00",
+            "max": "2026-06-25 17:27:00"
+          }
+        },
+        {
+          "name": "score",
+          "label": "作业得分",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "未交为空；已交作业全部完成批改",
+          "aliases": [
+            "作业得分"
+          ],
+          "role": "metric",
+          "aggregation": "avg",
+          "data_profile": {
+            "row_count": 48582,
+            "null_ratio": 0.028838,
+            "distinct_count": 845,
+            "sample_values": [
+              5.0,
+              6.1,
+              7.8,
+              8.4,
+              8.5
+            ],
+            "min": 5.0,
+            "max": 100.0,
+            "avg": 74.6372
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.knowledge_points",
+      "name": "knowledge_points",
+      "database": "school_teaching",
+      "label": "知识点",
+      "domain": "知识点分析",
+      "description": "知识点；粒度：年级学科的一个知识点。",
+      "business_terms": [
+        "知识点",
+        "知识点分析"
+      ],
+      "primary_key": [
+        "knowledge_id"
+      ],
+      "row_count": 110,
+      "fields": [
+        {
+          "name": "knowledge_id",
+          "label": "知识点编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "知识点唯一标识",
+          "aliases": [
+            "知识点编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 110,
+            "null_ratio": 0.0,
+            "distinct_count": 110,
+            "sample_values": [
+              "K7_BIO_1",
+              "K7_BIO_2",
+              "K7_BIO_3",
+              "K7_BIO_4",
+              "K7_BIO_5"
+            ]
+          }
+        },
+        {
+          "name": "subject_id",
+          "label": "学科编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学科",
+          "aliases": [
+            "学科编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 110,
+            "null_ratio": 0.0,
+            "distinct_count": 9,
+            "sample_values": [
+              "BIO",
+              "CHE",
+              "CHN",
+              "ENG",
+              "GEO"
+            ]
+          }
+        },
+        {
+          "name": "grade",
+          "label": "年级",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "所属年级",
+          "aliases": [
+            "年级"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 110,
+            "null_ratio": 0.0,
+            "distinct_count": 3,
+            "sample_values": [
+              7,
+              8,
+              9
+            ],
+            "min": 7,
+            "max": 9,
+            "avg": 8.0
+          }
+        },
+        {
+          "name": "knowledge_name",
+          "label": "知识点名称",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "采用真实课程中常见知识点名称；非特定教材进度",
+          "aliases": [
+            "知识点名称"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 110,
+            "null_ratio": 0.0,
+            "distinct_count": 99,
+            "sample_values": [
+              "一次函数",
+              "一般现在时",
+              "不等式",
+              "世界大战",
+              "中国区域地理"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.exam_questions",
+      "name": "exam_questions",
+      "database": "school_teaching",
+      "label": "试题",
+      "domain": "知识点分析",
+      "description": "试题；粒度：一份试卷中的一道评分题。",
+      "business_terms": [
+        "试题",
+        "知识点分析"
+      ],
+      "primary_key": [
+        "question_id"
+      ],
+      "row_count": 1320,
+      "fields": [
+        {
+          "name": "question_id",
+          "label": "试题编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "试题唯一标识",
+          "aliases": [
+            "试题编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1320,
+            "null_ratio": 0.0,
+            "distinct_count": 1320,
+            "sample_values": [
+              "EX7_BIO_1_Q01",
+              "EX7_BIO_1_Q02",
+              "EX7_BIO_1_Q03",
+              "EX7_BIO_1_Q04",
+              "EX7_BIO_1_Q05"
+            ]
+          }
+        },
+        {
+          "name": "exam_id",
+          "label": "考试编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属试卷",
+          "aliases": [
+            "考试编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1320,
+            "null_ratio": 0.0,
+            "distinct_count": 66,
+            "sample_values": [
+              "EX7_BIO_1",
+              "EX7_BIO_2",
+              "EX7_BIO_3",
+              "EX7_CHN_1",
+              "EX7_CHN_2"
+            ]
+          }
+        },
+        {
+          "name": "knowledge_id",
+          "label": "知识点编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "该题唯一主知识点，避免多标签关联重复计分",
+          "aliases": [
+            "知识点编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1320,
+            "null_ratio": 0.0,
+            "distinct_count": 110,
+            "sample_values": [
+              "K7_BIO_1",
+              "K7_BIO_2",
+              "K7_BIO_3",
+              "K7_BIO_4",
+              "K7_BIO_5"
+            ]
+          }
+        },
+        {
+          "name": "question_no",
+          "label": "题号",
+          "source_type": "INTEGER",
+          "type": "整数",
+          "description": "试卷内第1至20题",
+          "aliases": [
+            "题号"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1320,
+            "null_ratio": 0.0,
+            "distinct_count": 20,
+            "sample_values": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "min": 1,
+            "max": 20,
+            "avg": 10.5
+          }
+        },
+        {
+          "name": "question_type",
+          "label": "题型",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "choice客观题或constructed分步评分题",
+          "aliases": [
+            "题型"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 1320,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              "choice",
+              "constructed"
+            ]
+          }
+        },
+        {
+          "name": "max_score",
+          "label": "试题满分",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "20题满分合计等于试卷满分",
+          "aliases": [
+            "试题满分"
+          ],
+          "role": "dimension",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 1320,
+            "null_ratio": 0.0,
+            "distinct_count": 4,
+            "sample_values": [
+              3.0,
+              4.0,
+              7.0,
+              8.0
+            ],
+            "min": 3.0,
+            "max": 8.0,
+            "avg": 5.4091
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_teaching.question_responses",
+      "name": "question_responses",
+      "database": "school_teaching",
+      "label": "逐题得分",
+      "domain": "知识点分析",
+      "description": "逐题得分；粒度：一条实考成绩对应的一道题得分。",
+      "business_terms": [
+        "逐题得分",
+        "知识点分析"
+      ],
+      "primary_key": [
+        "response_id"
+      ],
+      "row_count": 333940,
+      "fields": [
+        {
+          "name": "response_id",
+          "label": "答题记录编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "答题记录唯一标识",
+          "aliases": [
+            "答题记录编号"
+          ],
+          "role": "identifier",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 333940,
+            "null_ratio": 0.0,
+            "distinct_count": 333940,
+            "sample_values": [
+              "QR00000001",
+              "QR00000002",
+              "QR00000003",
+              "QR00000004",
+              "QR00000005"
+            ]
+          }
+        },
+        {
+          "name": "result_id",
+          "label": "成绩编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属学生的实考成绩，缺考无答题记录",
+          "aliases": [
+            "成绩编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 333940,
+            "null_ratio": 0.0,
+            "distinct_count": 16697,
+            "sample_values": [
+              "ER000001",
+              "ER000002",
+              "ER000003",
+              "ER000004",
+              "ER000005"
+            ]
+          }
+        },
+        {
+          "name": "question_id",
+          "label": "试题编号",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "所属试题",
+          "aliases": [
+            "试题编号"
+          ],
+          "role": "foreign_key",
+          "aggregation": "none",
+          "data_profile": {
+            "row_count": 333940,
+            "null_ratio": 0.0,
+            "distinct_count": 1320,
+            "sample_values": [
+              "EX7_BIO_1_Q01",
+              "EX7_BIO_1_Q02",
+              "EX7_BIO_1_Q03",
+              "EX7_BIO_1_Q04",
+              "EX7_BIO_1_Q05"
+            ]
+          }
+        },
+        {
+          "name": "response_status",
+          "label": "作答状态",
+          "source_type": "VARCHAR",
+          "type": "文本",
+          "description": "answered已作答或blank未作答；未作答得0分",
+          "aliases": [
+            "作答状态"
+          ],
+          "role": "dimension",
+          "aggregation": "group",
+          "data_profile": {
+            "row_count": 333940,
+            "null_ratio": 0.0,
+            "distinct_count": 2,
+            "sample_values": [
+              "answered",
+              "blank"
+            ]
+          }
+        },
+        {
+          "name": "score",
+          "label": "试题得分",
+          "source_type": "DOUBLE",
+          "type": "数值",
+          "description": "客观题0或满分，分步题按0.5分给分",
+          "aliases": [
+            "试题得分"
+          ],
+          "role": "metric",
+          "aggregation": "avg",
+          "data_profile": {
+            "row_count": 333940,
+            "null_ratio": 0.0,
+            "distinct_count": 17,
+            "sample_values": [
+              0.0,
+              0.5,
+              1.0,
+              1.5,
+              2.0
+            ],
+            "min": 0.0,
+            "max": 8.0,
+            "avg": 3.7154
+          }
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "left_table": "school_teaching.schools",
+      "left_table_name": "schools",
+      "left_field": "school_id",
+      "right_table": "school_teaching.terms",
+      "right_table_name": "terms",
+      "right_field": "school_id",
+      "relation_type": "foreign_key",
+      "description": "学校关联学期"
+    },
+    {
+      "left_table": "school_teaching.schools",
+      "left_table_name": "schools",
+      "left_field": "school_id",
+      "right_table": "school_teaching.teachers",
+      "right_table_name": "teachers",
+      "right_field": "school_id",
+      "relation_type": "foreign_key",
+      "description": "学校关联教师"
+    },
+    {
+      "left_table": "school_teaching.schools",
+      "left_table_name": "schools",
+      "left_field": "school_id",
+      "right_table": "school_teaching.classes",
+      "right_table_name": "classes",
+      "right_field": "school_id",
+      "relation_type": "foreign_key",
+      "description": "学校关联行政班"
+    },
+    {
+      "left_table": "school_teaching.schools",
+      "left_table_name": "schools",
+      "left_field": "school_id",
+      "right_table": "school_teaching.students",
+      "right_table_name": "students",
+      "right_field": "school_id",
+      "relation_type": "foreign_key",
+      "description": "学校关联学生"
+    },
+    {
+      "left_table": "school_teaching.terms",
+      "left_table_name": "terms",
+      "left_field": "term_id",
+      "right_table": "school_teaching.classes",
+      "right_table_name": "classes",
+      "right_field": "term_id",
+      "relation_type": "foreign_key",
+      "description": "学期关联行政班"
+    },
+    {
+      "left_table": "school_teaching.terms",
+      "left_table_name": "terms",
+      "left_field": "term_id",
+      "right_table": "school_teaching.enrollments",
+      "right_table_name": "enrollments",
+      "right_field": "term_id",
+      "relation_type": "foreign_key",
+      "description": "学期关联学期班级学籍"
+    },
+    {
+      "left_table": "school_teaching.terms",
+      "left_table_name": "terms",
+      "left_field": "term_id",
+      "right_table": "school_teaching.teaching_assignments",
+      "right_table_name": "teaching_assignments",
+      "right_field": "term_id",
+      "relation_type": "foreign_key",
+      "description": "学期关联任课安排"
+    },
+    {
+      "left_table": "school_teaching.terms",
+      "left_table_name": "terms",
+      "left_field": "term_id",
+      "right_table": "school_teaching.academic_calendar",
+      "right_table_name": "academic_calendar",
+      "right_field": "term_id",
+      "relation_type": "foreign_key",
+      "description": "学期关联教学日历"
+    },
+    {
+      "left_table": "school_teaching.terms",
+      "left_table_name": "terms",
+      "left_field": "term_id",
+      "right_table": "school_teaching.exams",
+      "right_table_name": "exams",
+      "right_field": "term_id",
+      "relation_type": "foreign_key",
+      "description": "学期关联考试"
+    },
+    {
+      "left_table": "school_teaching.teachers",
+      "left_table_name": "teachers",
+      "left_field": "teacher_id",
+      "right_table": "school_teaching.classes",
+      "right_table_name": "classes",
+      "right_field": "homeroom_teacher_id",
+      "relation_type": "foreign_key",
+      "description": "教师关联行政班"
+    },
+    {
+      "left_table": "school_teaching.students",
+      "left_table_name": "students",
+      "left_field": "student_id",
+      "right_table": "school_teaching.enrollments",
+      "right_table_name": "enrollments",
+      "right_field": "student_id",
+      "relation_type": "foreign_key",
+      "description": "学生关联学期班级学籍"
+    },
+    {
+      "left_table": "school_teaching.classes",
+      "left_table_name": "classes",
+      "left_field": "class_id",
+      "right_table": "school_teaching.enrollments",
+      "right_table_name": "enrollments",
+      "right_field": "class_id",
+      "relation_type": "foreign_key",
+      "description": "行政班关联学期班级学籍"
+    },
+    {
+      "left_table": "school_teaching.classes",
+      "left_table_name": "classes",
+      "left_field": "class_id",
+      "right_table": "school_teaching.teaching_assignments",
+      "right_table_name": "teaching_assignments",
+      "right_field": "class_id",
+      "relation_type": "foreign_key",
+      "description": "行政班关联任课安排"
+    },
+    {
+      "left_table": "school_teaching.subjects",
+      "left_table_name": "subjects",
+      "left_field": "subject_id",
+      "right_table": "school_teaching.teaching_assignments",
+      "right_table_name": "teaching_assignments",
+      "right_field": "subject_id",
+      "relation_type": "foreign_key",
+      "description": "学科关联任课安排"
+    },
+    {
+      "left_table": "school_teaching.teachers",
+      "left_table_name": "teachers",
+      "left_field": "teacher_id",
+      "right_table": "school_teaching.teaching_assignments",
+      "right_table_name": "teaching_assignments",
+      "right_field": "teacher_id",
+      "relation_type": "foreign_key",
+      "description": "教师关联任课安排"
+    },
+    {
+      "left_table": "school_teaching.teaching_assignments",
+      "left_table_name": "teaching_assignments",
+      "left_field": "teaching_id",
+      "right_table": "school_teaching.lessons",
+      "right_table_name": "lessons",
+      "right_field": "teaching_id",
+      "relation_type": "foreign_key",
+      "description": "任课安排关联课次"
+    },
+    {
+      "left_table": "school_teaching.academic_calendar",
+      "left_table_name": "academic_calendar",
+      "left_field": "calendar_date",
+      "right_table": "school_teaching.lessons",
+      "right_table_name": "lessons",
+      "right_field": "lesson_date",
+      "relation_type": "foreign_key",
+      "description": "教学日历关联课次"
+    },
+    {
+      "left_table": "school_teaching.lessons",
+      "left_table_name": "lessons",
+      "left_field": "lesson_id",
+      "right_table": "school_teaching.attendance",
+      "right_table_name": "attendance",
+      "right_field": "lesson_id",
+      "relation_type": "foreign_key",
+      "description": "课次关联课堂考勤"
+    },
+    {
+      "left_table": "school_teaching.enrollments",
+      "left_table_name": "enrollments",
+      "left_field": "enrollment_id",
+      "right_table": "school_teaching.attendance",
+      "right_table_name": "attendance",
+      "right_field": "enrollment_id",
+      "relation_type": "foreign_key",
+      "description": "学期班级学籍关联课堂考勤"
+    },
+    {
+      "left_table": "school_teaching.subjects",
+      "left_table_name": "subjects",
+      "left_field": "subject_id",
+      "right_table": "school_teaching.exams",
+      "right_table_name": "exams",
+      "right_field": "subject_id",
+      "relation_type": "foreign_key",
+      "description": "学科关联考试"
+    },
+    {
+      "left_table": "school_teaching.academic_calendar",
+      "left_table_name": "academic_calendar",
+      "left_field": "calendar_date",
+      "right_table": "school_teaching.exams",
+      "right_table_name": "exams",
+      "right_field": "exam_date",
+      "relation_type": "foreign_key",
+      "description": "教学日历关联考试"
+    },
+    {
+      "left_table": "school_teaching.exams",
+      "left_table_name": "exams",
+      "left_field": "exam_id",
+      "right_table": "school_teaching.exam_results",
+      "right_table_name": "exam_results",
+      "right_field": "exam_id",
+      "relation_type": "foreign_key",
+      "description": "考试关联考试成绩"
+    },
+    {
+      "left_table": "school_teaching.enrollments",
+      "left_table_name": "enrollments",
+      "left_field": "enrollment_id",
+      "right_table": "school_teaching.exam_results",
+      "right_table_name": "exam_results",
+      "right_field": "enrollment_id",
+      "relation_type": "foreign_key",
+      "description": "学期班级学籍关联考试成绩"
+    },
+    {
+      "left_table": "school_teaching.teaching_assignments",
+      "left_table_name": "teaching_assignments",
+      "left_field": "teaching_id",
+      "right_table": "school_teaching.assignments",
+      "right_table_name": "assignments",
+      "right_field": "teaching_id",
+      "relation_type": "foreign_key",
+      "description": "任课安排关联作业布置"
+    },
+    {
+      "left_table": "school_teaching.assignments",
+      "left_table_name": "assignments",
+      "left_field": "assignment_id",
+      "right_table": "school_teaching.assignment_submissions",
+      "right_table_name": "assignment_submissions",
+      "right_field": "assignment_id",
+      "relation_type": "foreign_key",
+      "description": "作业布置关联作业提交"
+    },
+    {
+      "left_table": "school_teaching.enrollments",
+      "left_table_name": "enrollments",
+      "left_field": "enrollment_id",
+      "right_table": "school_teaching.assignment_submissions",
+      "right_table_name": "assignment_submissions",
+      "right_field": "enrollment_id",
+      "relation_type": "foreign_key",
+      "description": "学期班级学籍关联作业提交"
+    },
+    {
+      "left_table": "school_teaching.subjects",
+      "left_table_name": "subjects",
+      "left_field": "subject_id",
+      "right_table": "school_teaching.knowledge_points",
+      "right_table_name": "knowledge_points",
+      "right_field": "subject_id",
+      "relation_type": "foreign_key",
+      "description": "学科关联知识点"
+    },
+    {
+      "left_table": "school_teaching.exams",
+      "left_table_name": "exams",
+      "left_field": "exam_id",
+      "right_table": "school_teaching.exam_questions",
+      "right_table_name": "exam_questions",
+      "right_field": "exam_id",
+      "relation_type": "foreign_key",
+      "description": "考试关联试题"
+    },
+    {
+      "left_table": "school_teaching.knowledge_points",
+      "left_table_name": "knowledge_points",
+      "left_field": "knowledge_id",
+      "right_table": "school_teaching.exam_questions",
+      "right_table_name": "exam_questions",
+      "right_field": "knowledge_id",
+      "relation_type": "foreign_key",
+      "description": "知识点关联试题"
+    },
+    {
+      "left_table": "school_teaching.exam_results",
+      "left_table_name": "exam_results",
+      "left_field": "result_id",
+      "right_table": "school_teaching.question_responses",
+      "right_table_name": "question_responses",
+      "right_field": "result_id",
+      "relation_type": "foreign_key",
+      "description": "考试成绩关联逐题得分"
+    },
+    {
+      "left_table": "school_teaching.exam_questions",
+      "left_table_name": "exam_questions",
+      "left_field": "question_id",
+      "right_table": "school_teaching.question_responses",
+      "right_table_name": "question_responses",
+      "right_field": "question_id",
+      "relation_type": "foreign_key",
+      "description": "试题关联逐题得分"
+    }
+  ]
+}

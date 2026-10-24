@@ -1,0 +1,1840 @@
+{
+  "database": "school_teaching",
+  "synthetic": true,
+  "tables": 18,
+  "rows": 721465,
+  "checks_passed": 181,
+  "checks_total": 181,
+  "errors": [],
+  "summary": {
+    "students": 780,
+    "classes": 18,
+    "teachers": 66,
+    "class_sizes": [
+      {
+        "class_name": "七年级1班",
+        "students": 46
+      },
+      {
+        "class_name": "七年级2班",
+        "students": 43
+      },
+      {
+        "class_name": "七年级3班",
+        "students": 43
+      },
+      {
+        "class_name": "七年级4班",
+        "students": 46
+      },
+      {
+        "class_name": "七年级5班",
+        "students": 43
+      },
+      {
+        "class_name": "七年级6班",
+        "students": 41
+      },
+      {
+        "class_name": "九年级1班",
+        "students": 44
+      },
+      {
+        "class_name": "九年级2班",
+        "students": 40
+      },
+      {
+        "class_name": "九年级3班",
+        "students": 46
+      },
+      {
+        "class_name": "九年级4班",
+        "students": 42
+      },
+      {
+        "class_name": "九年级5班",
+        "students": 44
+      },
+      {
+        "class_name": "九年级6班",
+        "students": 43
+      },
+      {
+        "class_name": "八年级1班",
+        "students": 44
+      },
+      {
+        "class_name": "八年级2班",
+        "students": 43
+      },
+      {
+        "class_name": "八年级3班",
+        "students": 42
+      },
+      {
+        "class_name": "八年级4班",
+        "students": 43
+      },
+      {
+        "class_name": "八年级5班",
+        "students": 44
+      },
+      {
+        "class_name": "八年级6班",
+        "students": 43
+      }
+    ],
+    "exam_score_distribution": [
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "历史",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 255,
+        "average_pct": 68.02,
+        "stddev_pct": 15.56,
+        "pass_rate_pct": 74.51,
+        "minimum_pct": 19.5,
+        "maximum_pct": 95.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "地理",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 255,
+        "average_pct": 62.19,
+        "stddev_pct": 16.94,
+        "pass_rate_pct": 56.86,
+        "minimum_pct": 18.5,
+        "maximum_pct": 96.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "数学",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 258,
+        "average_pct": 73.81,
+        "stddev_pct": 14.33,
+        "pass_rate_pct": 81.01,
+        "minimum_pct": 14.17,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "生物",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 75.6,
+        "stddev_pct": 13.45,
+        "pass_rate_pct": 88.28,
+        "minimum_pct": 37.5,
+        "maximum_pct": 98.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "英语",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 258,
+        "average_pct": 70.64,
+        "stddev_pct": 14.82,
+        "pass_rate_pct": 75.19,
+        "minimum_pct": 22.92,
+        "maximum_pct": 97.92
+      },
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "语文",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 258,
+        "average_pct": 70.54,
+        "stddev_pct": 14.43,
+        "pass_rate_pct": 77.13,
+        "minimum_pct": 16.25,
+        "maximum_pct": 98.33
+      },
+      {
+        "grade": 7,
+        "exam_type": "final",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 255,
+        "average_pct": 65.67,
+        "stddev_pct": 15.41,
+        "pass_rate_pct": 66.27,
+        "minimum_pct": 12.0,
+        "maximum_pct": 95.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "历史",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 75.17,
+        "stddev_pct": 13.25,
+        "pass_rate_pct": 85.16,
+        "minimum_pct": 30.5,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "地理",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 70.54,
+        "stddev_pct": 14.04,
+        "pass_rate_pct": 78.91,
+        "minimum_pct": 29.0,
+        "maximum_pct": 96.5
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "数学",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 74.07,
+        "stddev_pct": 15.35,
+        "pass_rate_pct": 78.91,
+        "minimum_pct": 33.33,
+        "maximum_pct": 98.75
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "生物",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 74.28,
+        "stddev_pct": 14.39,
+        "pass_rate_pct": 83.86,
+        "minimum_pct": 22.5,
+        "maximum_pct": 98.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "英语",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 73.54,
+        "stddev_pct": 13.4,
+        "pass_rate_pct": 83.59,
+        "minimum_pct": 39.17,
+        "maximum_pct": 96.25
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "语文",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 65.66,
+        "stddev_pct": 16.74,
+        "pass_rate_pct": 65.23,
+        "minimum_pct": 15.42,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 7,
+        "exam_type": "midterm",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 72.14,
+        "stddev_pct": 14.57,
+        "pass_rate_pct": 80.86,
+        "minimum_pct": 20.5,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "历史",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 69.69,
+        "stddev_pct": 15.62,
+        "pass_rate_pct": 73.62,
+        "minimum_pct": 17.0,
+        "maximum_pct": 96.5
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "地理",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 73.97,
+        "stddev_pct": 14.15,
+        "pass_rate_pct": 82.68,
+        "minimum_pct": 36.0,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "数学",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 66.31,
+        "stddev_pct": 16.42,
+        "pass_rate_pct": 64.96,
+        "minimum_pct": 16.25,
+        "maximum_pct": 97.92
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "生物",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 256,
+        "average_pct": 71.0,
+        "stddev_pct": 14.66,
+        "pass_rate_pct": 77.73,
+        "minimum_pct": 26.5,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "英语",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 69.46,
+        "stddev_pct": 14.88,
+        "pass_rate_pct": 74.8,
+        "minimum_pct": 30.83,
+        "maximum_pct": 97.08
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "语文",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 63.96,
+        "stddev_pct": 14.73,
+        "pass_rate_pct": 60.63,
+        "minimum_pct": 17.92,
+        "maximum_pct": 96.67
+      },
+      {
+        "grade": 7,
+        "exam_type": "monthly",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 262,
+        "attended_exam_persons": 254,
+        "average_pct": 65.33,
+        "stddev_pct": 15.79,
+        "pass_rate_pct": 65.35,
+        "minimum_pct": 18.5,
+        "maximum_pct": 94.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "历史",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 70.17,
+        "stddev_pct": 15.84,
+        "pass_rate_pct": 74.8,
+        "minimum_pct": 26.0,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "地理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 75.72,
+        "stddev_pct": 14.25,
+        "pass_rate_pct": 84.65,
+        "minimum_pct": 32.5,
+        "maximum_pct": 98.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "数学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 255,
+        "average_pct": 70.94,
+        "stddev_pct": 15.81,
+        "pass_rate_pct": 73.73,
+        "minimum_pct": 21.67,
+        "maximum_pct": 97.08
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "物理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 67.27,
+        "stddev_pct": 14.52,
+        "pass_rate_pct": 71.15,
+        "minimum_pct": 21.0,
+        "maximum_pct": 96.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "生物",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 69.42,
+        "stddev_pct": 15.95,
+        "pass_rate_pct": 71.15,
+        "minimum_pct": 25.5,
+        "maximum_pct": 94.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "英语",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 255,
+        "average_pct": 70.12,
+        "stddev_pct": 15.96,
+        "pass_rate_pct": 72.94,
+        "minimum_pct": 16.25,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "语文",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 255,
+        "average_pct": 68.21,
+        "stddev_pct": 16.96,
+        "pass_rate_pct": 69.41,
+        "minimum_pct": 20.0,
+        "maximum_pct": 99.17
+      },
+      {
+        "grade": 8,
+        "exam_type": "final",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 68.74,
+        "stddev_pct": 15.82,
+        "pass_rate_pct": 73.62,
+        "minimum_pct": 19.0,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "历史",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 251,
+        "average_pct": 70.67,
+        "stddev_pct": 14.63,
+        "pass_rate_pct": 76.89,
+        "minimum_pct": 19.5,
+        "maximum_pct": 96.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "地理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 251,
+        "average_pct": 62.95,
+        "stddev_pct": 15.68,
+        "pass_rate_pct": 59.76,
+        "minimum_pct": 10.0,
+        "maximum_pct": 94.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "数学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 250,
+        "average_pct": 66.42,
+        "stddev_pct": 15.87,
+        "pass_rate_pct": 70.4,
+        "minimum_pct": 24.58,
+        "maximum_pct": 98.33
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "物理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 249,
+        "average_pct": 68.6,
+        "stddev_pct": 14.91,
+        "pass_rate_pct": 72.29,
+        "minimum_pct": 32.5,
+        "maximum_pct": 96.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "生物",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 249,
+        "average_pct": 71.3,
+        "stddev_pct": 15.31,
+        "pass_rate_pct": 76.71,
+        "minimum_pct": 24.0,
+        "maximum_pct": 96.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "英语",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 250,
+        "average_pct": 67.88,
+        "stddev_pct": 15.75,
+        "pass_rate_pct": 69.6,
+        "minimum_pct": 28.75,
+        "maximum_pct": 96.25
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "语文",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 250,
+        "average_pct": 68.14,
+        "stddev_pct": 17.15,
+        "pass_rate_pct": 68.8,
+        "minimum_pct": 22.92,
+        "maximum_pct": 98.75
+      },
+      {
+        "grade": 8,
+        "exam_type": "midterm",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 251,
+        "average_pct": 64.28,
+        "stddev_pct": 16.04,
+        "pass_rate_pct": 60.56,
+        "minimum_pct": 14.5,
+        "maximum_pct": 99.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "历史",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 69.02,
+        "stddev_pct": 15.0,
+        "pass_rate_pct": 71.83,
+        "minimum_pct": 22.5,
+        "maximum_pct": 96.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "地理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 61.92,
+        "stddev_pct": 16.45,
+        "pass_rate_pct": 58.73,
+        "minimum_pct": 22.0,
+        "maximum_pct": 94.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "数学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 69.12,
+        "stddev_pct": 15.74,
+        "pass_rate_pct": 71.43,
+        "minimum_pct": 27.08,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "物理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 257,
+        "average_pct": 73.69,
+        "stddev_pct": 14.87,
+        "pass_rate_pct": 83.66,
+        "minimum_pct": 18.0,
+        "maximum_pct": 98.5
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "生物",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 257,
+        "average_pct": 66.01,
+        "stddev_pct": 17.32,
+        "pass_rate_pct": 63.81,
+        "minimum_pct": 17.0,
+        "maximum_pct": 98.0
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "英语",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 69.33,
+        "stddev_pct": 15.38,
+        "pass_rate_pct": 73.41,
+        "minimum_pct": 10.42,
+        "maximum_pct": 97.08
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "语文",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 68.5,
+        "stddev_pct": 15.75,
+        "pass_rate_pct": 71.43,
+        "minimum_pct": 24.17,
+        "maximum_pct": 97.08
+      },
+      {
+        "grade": 8,
+        "exam_type": "monthly",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 70.15,
+        "stddev_pct": 15.86,
+        "pass_rate_pct": 73.81,
+        "minimum_pct": 26.5,
+        "maximum_pct": 96.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "化学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 252,
+        "average_pct": 62.58,
+        "stddev_pct": 16.39,
+        "pass_rate_pct": 58.33,
+        "minimum_pct": 16.0,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "历史",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 64.55,
+        "stddev_pct": 16.0,
+        "pass_rate_pct": 62.06,
+        "minimum_pct": 22.0,
+        "maximum_pct": 93.5
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "数学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 65.08,
+        "stddev_pct": 15.78,
+        "pass_rate_pct": 62.6,
+        "minimum_pct": 19.58,
+        "maximum_pct": 93.33
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "物理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 70.84,
+        "stddev_pct": 14.58,
+        "pass_rate_pct": 76.28,
+        "minimum_pct": 26.5,
+        "maximum_pct": 98.5
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "英语",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 66.4,
+        "stddev_pct": 15.61,
+        "pass_rate_pct": 67.72,
+        "minimum_pct": 13.33,
+        "maximum_pct": 96.25
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "语文",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 72.07,
+        "stddev_pct": 14.77,
+        "pass_rate_pct": 79.92,
+        "minimum_pct": 29.17,
+        "maximum_pct": 97.92
+      },
+      {
+        "grade": 9,
+        "exam_type": "final",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 70.37,
+        "stddev_pct": 15.7,
+        "pass_rate_pct": 75.1,
+        "minimum_pct": 19.0,
+        "maximum_pct": 98.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "化学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 248,
+        "average_pct": 66.2,
+        "stddev_pct": 15.51,
+        "pass_rate_pct": 67.74,
+        "minimum_pct": 13.0,
+        "maximum_pct": 96.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "历史",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 247,
+        "average_pct": 63.08,
+        "stddev_pct": 16.59,
+        "pass_rate_pct": 61.13,
+        "minimum_pct": 13.0,
+        "maximum_pct": 96.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "数学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 246,
+        "average_pct": 67.38,
+        "stddev_pct": 14.81,
+        "pass_rate_pct": 70.33,
+        "minimum_pct": 12.92,
+        "maximum_pct": 97.08
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "物理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 247,
+        "average_pct": 71.55,
+        "stddev_pct": 14.56,
+        "pass_rate_pct": 76.11,
+        "minimum_pct": 33.0,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "英语",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 246,
+        "average_pct": 63.9,
+        "stddev_pct": 15.82,
+        "pass_rate_pct": 60.57,
+        "minimum_pct": 14.17,
+        "maximum_pct": 96.67
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "语文",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 246,
+        "average_pct": 65.57,
+        "stddev_pct": 14.75,
+        "pass_rate_pct": 66.26,
+        "minimum_pct": 26.25,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 9,
+        "exam_type": "midterm",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 247,
+        "average_pct": 70.61,
+        "stddev_pct": 14.84,
+        "pass_rate_pct": 76.11,
+        "minimum_pct": 25.5,
+        "maximum_pct": 98.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "化学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 251,
+        "average_pct": 62.73,
+        "stddev_pct": 16.15,
+        "pass_rate_pct": 58.17,
+        "minimum_pct": 17.0,
+        "maximum_pct": 93.5
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "历史",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 66.75,
+        "stddev_pct": 15.95,
+        "pass_rate_pct": 68.11,
+        "minimum_pct": 26.5,
+        "maximum_pct": 97.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "数学",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 70.84,
+        "stddev_pct": 14.78,
+        "pass_rate_pct": 76.28,
+        "minimum_pct": 22.08,
+        "maximum_pct": 97.5
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "物理",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 71.65,
+        "stddev_pct": 14.41,
+        "pass_rate_pct": 76.77,
+        "minimum_pct": 29.5,
+        "maximum_pct": 99.0
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "英语",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 64.66,
+        "stddev_pct": 16.64,
+        "pass_rate_pct": 64.03,
+        "minimum_pct": 20.83,
+        "maximum_pct": 94.17
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "语文",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 253,
+        "average_pct": 67.85,
+        "stddev_pct": 15.06,
+        "pass_rate_pct": 69.96,
+        "minimum_pct": 27.92,
+        "maximum_pct": 97.08
+      },
+      {
+        "grade": 9,
+        "exam_type": "monthly",
+        "subject_name": "道德与法治",
+        "expected_exam_persons": 259,
+        "attended_exam_persons": 254,
+        "average_pct": 68.18,
+        "stddev_pct": 16.14,
+        "pass_rate_pct": 72.83,
+        "minimum_pct": 23.0,
+        "maximum_pct": 97.0
+      }
+    ],
+    "attendance_states": [
+      {
+        "attendance_status": "absent",
+        "count": 1536,
+        "percentage": 0.495
+      },
+      {
+        "attendance_status": "excused",
+        "count": 5374,
+        "percentage": 1.733
+      },
+      {
+        "attendance_status": "late",
+        "count": 4039,
+        "percentage": 1.303
+      },
+      {
+        "attendance_status": "present",
+        "count": 299139,
+        "percentage": 96.469
+      }
+    ],
+    "submission_states": [
+      {
+        "submission_status": "late",
+        "count": 3008,
+        "percentage": 6.192
+      },
+      {
+        "submission_status": "missing",
+        "count": 1401,
+        "percentage": 2.884
+      },
+      {
+        "submission_status": "on_time",
+        "count": 44173,
+        "percentage": 90.925
+      }
+    ],
+    "exam_states": [
+      {
+        "exam_status": "absent",
+        "count": 460
+      },
+      {
+        "exam_status": "attended",
+        "count": 16697
+      }
+    ],
+    "baseline_final_correlation": 0.6977,
+    "homework_exam_correlation": 0.7579
+  },
+  "checks": [
+    {
+      "check": "schools: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "schools: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "schools: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "schools: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "schools: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "schools: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "subjects: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "subjects: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "subjects: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "subjects: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "subjects: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "subjects: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses: non-null primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses: unique primary key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses: required fields",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses: manifest count",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses: file checksum",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses: schema metadata",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "terms.school_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teachers.school_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes.school_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "students.school_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes.term_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments.term_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments.term_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "academic_calendar.term_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams.term_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "classes.homeroom_teacher_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments.student_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "enrollments.class_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments.class_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments.subject_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teaching_assignments.teacher_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons.teaching_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons.lesson_date: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance.lesson_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance.enrollment_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams.subject_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams.exam_date: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results.exam_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_results.enrollment_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignments.teaching_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions.assignment_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment_submissions.enrollment_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge_points.subject_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions.exam_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam_questions.knowledge_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses.result_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "question_responses.question_id: foreign key",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "single enrollment per student and term",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "student ages and admission years",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "one teacher per class subject term",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "homeroom teacher teaches their class",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "class timetable has no overlaps",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "teacher timetable has no overlaps",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "lessons only on teaching days",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "no lessons on grade examination days",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "unique student per lesson",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "attendance matches enrollment and lesson",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "complete lesson rosters",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "valid attendance states and minutes",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "full-day leave and absence are consistent",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exams only on exam days",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam schedules do not overlap",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam roster unique",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "exam results match grade term enrollment",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "complete exam rosters",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "absent scores null and attended scores in range",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "paper totals and twenty questions",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "knowledge matches exam grade subject",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "one response per student question",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "response belongs to the correct exam",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "response scores and blank answers",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "total scores reconcile with responses",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "one homework record per required student",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "homework matches class enrollment",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "complete homework rosters",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "homework state timestamps and scores",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "assignment follows actual class lesson",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "observations remain inside the term",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 1: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 2: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 3: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 4: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 5: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 6: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 7: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 8: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 9: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "example query 10: nonempty executable result",
+      "passed": true,
+      "violations": 0
+    },
+    {
+      "check": "manifest totals and schema table counts",
+      "passed": true,
+      "violations": 0
+    }
+  ]
+}

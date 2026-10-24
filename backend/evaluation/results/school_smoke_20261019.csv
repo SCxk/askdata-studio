@@ -1,0 +1,15 @@
+﻿case_id,category,difficulty,query,schema_recall,expanded_recall,sql_execution_success,first_sql_execution_success,result_correct,comparison_reason,elapsed_seconds,response_status,error,generated_sql
+EDU-001,成绩,medium,八年级期中数学各班平均分是多少？输出班级名称、平均分，按原始满分计，排除缺考。,0.6363636363636364,0.7272727272727273,True,True,True,结果一致,21.958,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  ROUND(AVG(er.score), 2) AS ""平均分""
+FROM exam_results er
+JOIN enrollments e ON er.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+JOIN exams ex ON er.exam_id = ex.exam_id
+JOIN subjects s ON ex.subject_id = s.subject_id
+WHERE ex.grade = 8
+  AND ex.exam_type = 'midterm'
+  AND s.subject_name = '数学'
+  AND er.exam_status = 'attended'
+GROUP BY c.class_name
+ORDER BY c.class_name"

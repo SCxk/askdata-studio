@@ -1,0 +1,397 @@
+﻿case_id,category,difficulty,query,schema_recall,expanded_recall,sql_execution_success,first_sql_execution_success,result_correct,comparison_reason,elapsed_seconds,response_status,error,generated_sql
+EDU-001,成绩,medium,八年级期中数学各班平均分是多少？输出班级名称、平均分，按原始满分计，排除缺考。,0.6363636363636364,0.7272727272727273,True,True,False,缺少或无法识别列：班级名称,22.434,completed,,"SELECT
+  c.class_name AS ""班级"",
+  ROUND(AVG(er.score), 2) AS ""平均分""
+FROM exam_results er
+JOIN enrollments e ON er.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+JOIN exams ex ON er.exam_id = ex.exam_id
+JOIN subjects s ON ex.subject_id = s.subject_id
+WHERE ex.grade = 8
+  AND ex.exam_type = 'midterm'
+  AND s.subject_name = '数学'
+  AND er.exam_status = 'attended'
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-002,成绩,medium,七年级期末英语各班及格率是多少？输出班级名称、及格率，及格线为满分的60%，分母为实考人数，比率用0到1。,0.5833333333333334,0.6666666666666666,True,True,False,缺少或无法识别列：班级名称,22.79,completed,,"SELECT 
+  c.class_name AS ""班级"",
+  COUNT(CASE WHEN er.exam_status = 'attended' AND er.score >= e.max_score * s.pass_ratio THEN 1 END) * 1.0 / NULLIF(COUNT(CASE WHEN er.exam_status = 'attended' THEN 1 END), 0) AS ""及格率""
+FROM exam_results er
+JOIN exams e ON er.exam_id = e.exam_id
+JOIN enrollments en ON er.enrollment_id = en.enrollment_id
+JOIN classes c ON en.class_id = c.class_id
+JOIN subjects s ON e.subject_id = s.subject_id
+WHERE c.grade = 7
+  AND e.exam_type = 'final'
+  AND s.subject_name = '英语'
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-003,成绩,medium,各年级期中考试缺考记录有多少条？输出年级、缺考人次。,0.6666666666666666,0.8333333333333334,True,True,True,结果一致,18.77,completed,,"SELECT
+  e.grade AS ""年级"",
+  COUNT(*) AS ""缺考人次""
+FROM exam_results er
+JOIN exams e ON er.exam_id = e.exam_id
+WHERE er.exam_status = 'absent'
+  AND e.exam_type = 'midterm'
+GROUP BY e.grade
+ORDER BY e.grade"
+EDU-004,成绩,hard,九年级期末物理原始成绩最高的前5名是谁？输出学号、姓名、成绩；成绩降序，同分按学号升序。排除缺考。,0.3076923076923077,0.6153846153846154,True,True,True,结果一致,22.777,completed,,"SELECT 
+  s.student_id AS ""学号"",
+  s.student_name AS ""姓名"",
+  er.score AS ""成绩""
+FROM exam_results er
+JOIN exams e ON er.exam_id = e.exam_id
+JOIN enrollments en ON er.enrollment_id = en.enrollment_id
+JOIN students s ON en.student_id = s.student_id
+WHERE e.grade = 9
+  AND e.subject_id = 'PHY'
+  AND e.exam_type = 'final'
+  AND er.exam_status = 'attended'
+ORDER BY er.score DESC, s.student_id ASC
+LIMIT 5"
+EDU-005,成绩,medium,八年级期末各学科平均得分率是多少？输出学科名称、平均得分率，先算每个实考学生的成绩除以该考试满分，再求平均，用0到1。,0.7777777777777778,0.7777777777777778,True,True,True,结果一致,21.053,completed,,"SELECT 
+  s.subject_name AS ""学科名称"",
+  AVG(er.score / e.max_score) AS ""平均得分率""
+FROM exam_results er
+JOIN exams e ON er.exam_id = e.exam_id
+JOIN subjects s ON e.subject_id = s.subject_id
+WHERE e.grade = 8 
+  AND e.exam_type = 'final'
+  AND er.exam_status = 'attended'
+GROUP BY s.subject_name
+ORDER BY s.subject_name"
+EDU-006,成绩,hard,八年级各班数学从期中到期末平均原始分提高了多少？输出班级名称、期中平均分、期末平均分、提升分数；各次考试分别排除缺考。,0.9090909090909091,1.0,True,True,True,结果一致,24.388,completed,,"SELECT
+  c.class_name AS ""班级名称"",
+  ROUND(AVG(CASE WHEN e.exam_type = 'midterm' THEN er.score END), 2) AS ""期中平均分"",
+  ROUND(AVG(CASE WHEN e.exam_type = 'final' THEN er.score END), 2) AS ""期末平均分"",
+  ROUND(
+    AVG(CASE WHEN e.exam_type = 'final' THEN er.score END) - 
+    AVG(CASE WHEN e.exam_type = 'midterm' THEN er.score END), 
+    2
+  ) AS ""提升分数""
+FROM exam_results er
+JOIN exams e ON er.exam_id = e.exam_id
+JOIN enrollments en ON er.enrollment_id = en.enrollment_id
+JOIN classes c ON en.class_id = c.class_id
+WHERE e.grade = 8
+  AND e.subject_id = 'MAT'
+  AND e.exam_type IN ('midterm', 'final')
+  AND er.exam_status = 'attended'
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-007,成绩,medium,七年级期中语文各班实考人数和应考人数分别是多少？只输出班级名称、实考人数、应考人数。,0.8333333333333334,0.9166666666666666,True,True,False,缺少或无法识别列：班级名称,19.966,completed,,"SELECT 
+  c.class_name AS ""班级"",
+  COUNT(CASE WHEN er.exam_status = 'attended' THEN 1 END) AS ""实考人数"",
+  COUNT(er.result_id) AS ""应考人数""
+FROM exam_results er
+JOIN exams e ON er.exam_id = e.exam_id
+JOIN enrollments en ON er.enrollment_id = en.enrollment_id
+JOIN classes c ON en.class_id = c.class_id
+WHERE e.grade = 7
+  AND e.exam_type = 'midterm'
+  AND e.subject_id = 'CHN'
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-008,成绩,easy,2026年9月举行了多少场考试？输出考试场次。,1.0,1.0,True,True,True,结果一致,17.792,completed,,"SELECT COUNT(DISTINCT exam_id) AS ""考试场次"" FROM exams WHERE exam_date >= '2026-09-01' AND exam_date < '2026-10-01'"
+EDU-009,考勤,medium,本学期每月出勤率是多少？输出月份（YYYY-MM）、出勤率；出勤含正常和迟到，分母含请假和缺勤，用0到1。,0.7,0.8,True,True,True,结果一致,21.22,completed,,"SELECT 
+  STRFTIME(l.lesson_date, '%Y-%m') AS ""月份"",
+  CAST(SUM(CASE WHEN a.attendance_status IN ('present', 'late') THEN 1 ELSE 0 END) AS DOUBLE) / NULLIF(COUNT(*), 0) AS ""出勤率""
+FROM attendance a
+JOIN lessons l ON a.lesson_id = l.lesson_id
+JOIN academic_calendar ac ON l.lesson_date = ac.calendar_date
+WHERE ac.term_id = 'T2025_2026_2'
+GROUP BY STRFTIME(l.lesson_date, '%Y-%m')
+ORDER BY ""月份"""
+EDU-010,考勤,medium,2026年3月各年级迟到人次是多少？输出年级、迟到人次。,0.3,0.6,True,True,True,结果一致,19.786,completed,,"SELECT 
+  c.grade AS ""年级"",
+  COUNT(*) AS ""迟到人次""
+FROM attendance a
+JOIN lessons l ON a.lesson_id = l.lesson_id
+JOIN teaching_assignments ta ON l.teaching_id = ta.teaching_id
+JOIN classes c ON ta.class_id = c.class_id
+WHERE a.attendance_status = 'late'
+  AND l.lesson_date >= '2026-03-01'
+  AND l.lesson_date < '2026-04-01'
+GROUP BY c.grade
+ORDER BY c.grade"
+EDU-011,考勤,medium,全学期各班请假人次是多少？只输出班级名称、请假人次。,0.5555555555555556,0.8888888888888888,True,False,True,结果一致,25.649,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  COUNT(*) AS ""请假人次""
+FROM attendance a
+JOIN enrollments e ON a.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE a.attendance_status = 'excused'
+GROUP BY c.class_name
+ORDER BY ""请假人次"" DESC, c.class_name ASC"
+EDU-012,考勤,medium,全学期各年级迟到记录的平均迟到分钟数是多少？只统计迟到，输出年级、平均迟到分钟数。,0.4444444444444444,0.6666666666666666,True,False,True,结果一致,32.039,completed,,"SELECT
+  c.grade AS ""年级"",
+  AVG(a.late_minutes) AS ""平均迟到分钟数""
+FROM attendance a
+JOIN lessons l ON a.lesson_id = l.lesson_id
+JOIN teaching_assignments ta ON l.teaching_id = ta.teaching_id
+JOIN classes c ON ta.class_id = c.class_id
+WHERE a.attendance_status = 'late'
+  AND c.term_id = 'T2025_2026_2'
+GROUP BY c.grade
+ORDER BY c.grade"
+EDU-013,考勤,medium,全学期缺勤（absent）人次最多的前5个班级是什么？输出班级名称、缺勤人次；人次降序，同值按班级名称升序。,0.7777777777777778,0.8888888888888888,True,True,True,结果一致,18.927,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  COUNT(*) AS ""缺勤人次""
+FROM attendance a
+JOIN enrollments e ON a.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE a.attendance_status = 'absent'
+GROUP BY c.class_name
+ORDER BY ""缺勤人次"" DESC, c.class_name ASC
+LIMIT 5"
+EDU-014,考勤,medium,2026年4月各班出勤率是多少？输出班级名称、出勤率；正常和迟到算出勤，所有应到记录作分母，用0到1。,0.9,1.0,True,True,False,缺少或无法识别列：班级名称,22.316,completed,,"SELECT
+  c.class_name AS ""班级"",
+  CAST(SUM(CASE WHEN a.attendance_status IN ('present', 'late') THEN 1 ELSE 0 END) AS DOUBLE) / NULLIF(COUNT(*), 0) AS ""出勤率""
+FROM attendance a
+JOIN lessons l ON a.lesson_id = l.lesson_id
+JOIN enrollments e ON a.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE l.lesson_date >= '2026-04-01' AND l.lesson_date < '2026-05-01'
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-015,考勤,easy,全学期按考勤状态统计课堂考勤记录数，输出考勤状态（原始英文编码）、记录数。,1.0,1.0,True,True,True,结果一致,16.025,completed,,"SELECT attendance_status, COUNT(*) AS record_count FROM attendance GROUP BY attendance_status ORDER BY attendance_status"
+EDU-016,考勤,medium,2026年9月各班有多少条考勤记录？输出班级名称、记录数；仅返回有记录的班级。,0.8888888888888888,1.0,True,True,True,结果一致,19.154,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  COUNT(a.attendance_id) AS ""记录数""
+FROM attendance a
+JOIN lessons l ON a.lesson_id = l.lesson_id
+JOIN teaching_assignments ta ON l.teaching_id = ta.teaching_id
+JOIN classes c ON ta.class_id = c.class_id
+WHERE l.lesson_date >= '2026-09-01' AND l.lesson_date < '2026-10-01'
+GROUP BY c.class_name
+HAVING COUNT(a.attendance_id) > 0
+ORDER BY ""记录数"" DESC, c.class_name ASC"
+EDU-017,作业,medium,本学期各班作业完成率和按时提交率是多少？输出班级名称、完成率、按时提交率；分母包括未交，补交算完成，比率用0到1。,0.7,0.9,True,False,True,结果一致,31.308,completed,,"SELECT
+  c.class_name AS ""班级名称"",
+  ROUND(CAST(SUM(CASE WHEN s.submission_status IN ('on_time', 'late') THEN 1 ELSE 0 END) AS DOUBLE) / NULLIF(COUNT(*), 0), 4) AS ""完成率"",
+  ROUND(CAST(SUM(CASE WHEN s.submission_status = 'on_time' THEN 1 ELSE 0 END) AS DOUBLE) / NULLIF(COUNT(*), 0), 4) AS ""按时提交率""
+FROM assignment_submissions s
+JOIN enrollments e ON s.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE c.term_id = 'T2025_2026_2'
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-018,作业,medium,各年级作业未交人次是多少？只输出年级、未交人次。,0.5555555555555556,0.7777777777777778,True,True,True,结果一致,16.896,completed,,"SELECT 
+  c.grade AS ""年级"",
+  COUNT(*) AS ""未交人次""
+FROM assignment_submissions s
+JOIN enrollments e ON s.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE s.submission_status = 'missing'
+GROUP BY c.grade
+ORDER BY c.grade"
+EDU-019,作业,medium,2026年3月各学科布置了多少份作业？按布置时间筛选，输出学科名称、作业份数，每份作业只算一次。,0.8571428571428571,1.0,True,False,True,结果一致,28.3,completed,,"SELECT 
+  s.subject_name AS ""学科名称"",
+  COUNT(DISTINCT a.assignment_id) AS ""作业份数""
+FROM assignments a
+JOIN teaching_assignments ta ON a.teaching_id = ta.teaching_id
+JOIN subjects s ON ta.subject_id = s.subject_id
+WHERE a.assigned_at >= '2026-03-01' AND a.assigned_at < '2026-04-01'
+GROUP BY s.subject_name
+ORDER BY ""作业份数"" DESC, s.subject_name ASC"
+EDU-020,作业,medium,八年级各班数学作业的已批改平均原始分是多少？排除无成绩记录，输出班级名称、平均分。,0.6,1.0,True,True,True,结果一致,21.797,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  ROUND(AVG(s.score), 2) AS ""平均分""
+FROM assignment_submissions s
+JOIN assignments a ON s.assignment_id = a.assignment_id
+JOIN teaching_assignments ta ON a.teaching_id = ta.teaching_id
+JOIN subjects sub ON ta.subject_id = sub.subject_id
+JOIN enrollments e ON s.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE c.grade = 8
+  AND sub.subject_name = '数学'
+  AND s.score IS NOT NULL
+GROUP BY c.class_name
+ORDER BY c.class_name"
+EDU-021,作业,medium,全学期各学科作业平均预计用时是多少分钟？每份作业等权，输出学科名称、平均预计分钟数。,0.8333333333333334,1.0,True,False,True,结果一致,26.981,completed,,"SELECT 
+  s.subject_name AS ""学科名称"",
+  ROUND(AVG(a.estimated_minutes), 2) AS ""平均预计分钟数""
+FROM assignments a
+JOIN teaching_assignments ta ON a.teaching_id = ta.teaching_id
+JOIN subjects s ON ta.subject_id = s.subject_id
+GROUP BY s.subject_name
+ORDER BY s.subject_name"
+EDU-022,作业,medium,全学期补交（late）作业人次最多的前5个班级是什么？输出班级名称、补交人次；人次降序，同值按班级名称升序。,0.6666666666666666,0.8888888888888888,True,True,True,结果一致,19.277,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  COUNT(*) AS ""补交人次""
+FROM assignment_submissions s
+JOIN enrollments e ON s.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE s.submission_status = 'late'
+GROUP BY c.class_name
+ORDER BY ""补交人次"" DESC, ""班级名称"" ASC
+LIMIT 5"
+EDU-023,作业,medium,各年级英语作业完成率是多少？输出年级、完成率，按时和补交算完成，全部应交记录作分母，用0到1。,0.5,0.9,True,True,True,结果一致,19.901,completed,,"SELECT 
+  c.grade AS ""年级"",
+  CAST(SUM(CASE WHEN s.submission_status IN ('on_time', 'late') THEN 1 ELSE 0 END) AS DOUBLE) / NULLIF(COUNT(*), 0) AS ""完成率""
+FROM assignment_submissions s
+JOIN assignments a ON s.assignment_id = a.assignment_id
+JOIN teaching_assignments ta ON a.teaching_id = ta.teaching_id
+JOIN subjects sub ON ta.subject_id = sub.subject_id
+JOIN enrollments e ON s.enrollment_id = e.enrollment_id
+JOIN classes c ON e.class_id = c.class_id
+WHERE sub.subject_name = '英语'
+GROUP BY c.grade
+ORDER BY c.grade"
+EDU-024,作业,easy,本学期按提交状态统计作业应交记录数，输出提交状态（原始英文编码）、记录数。,0.5714285714285714,0.5714285714285714,True,False,True,结果一致,27.187,completed,,"SELECT 
+  assignment_submissions.submission_status AS ""提交状态"",
+  COUNT(*) AS ""记录数""
+FROM assignment_submissions
+JOIN assignments ON assignment_submissions.assignment_id = assignments.assignment_id
+JOIN teaching_assignments ON assignments.teaching_id = teaching_assignments.teaching_id
+WHERE teaching_assignments.term_id = 'T2025_2026_2'
+GROUP BY assignment_submissions.submission_status
+ORDER BY ""记录数"" DESC, ""提交状态"" ASC"
+EDU-025,知识点,hard,八年级期中数学各知识点得分率是多少？输出知识点名称、得分率，以学生题目总得分除以对应题目总满分，用0到1，包含缺考答题记录。,0.6666666666666666,0.8333333333333334,True,False,True,结果一致,33.048,completed,,"SELECT
+  kp.knowledge_name AS ""知识点名称"",
+  SUM(qr.score) / NULLIF(SUM(eq.max_score), 0) AS ""得分率""
+FROM exams e
+JOIN exam_questions eq ON e.exam_id = eq.exam_id
+JOIN knowledge_points kp ON eq.knowledge_id = kp.knowledge_id
+JOIN exam_results er ON e.exam_id = er.exam_id
+JOIN question_responses qr ON er.result_id = qr.result_id AND eq.question_id = qr.question_id
+WHERE e.grade = 8
+  AND e.exam_type = 'midterm'
+  AND kp.subject_id = 'MAT'
+GROUP BY kp.knowledge_name
+ORDER BY ""得分率"" DESC, kp.knowledge_name ASC"
+EDU-026,知识点,hard,七年级期末英语得分率最低的3个知识点是什么？输出知识点名称、得分率；总得分除以对应总满分，包含缺考记录，用0到1，按得分率升序，同值按知识点名称升序。,0.4166666666666667,0.75,True,True,True,结果一致,22.942,completed,,"SELECT
+  kp.knowledge_name AS ""知识点名称"",
+  SUM(qr.score) / NULLIF(SUM(eq.max_score), 0) AS ""得分率""
+FROM exams e
+JOIN exam_questions eq ON e.exam_id = eq.exam_id
+JOIN knowledge_points kp ON eq.knowledge_id = kp.knowledge_id
+JOIN exam_results er ON e.exam_id = er.exam_id
+JOIN question_responses qr ON er.result_id = qr.result_id AND eq.question_id = qr.question_id
+WHERE e.grade = 7
+  AND e.subject_id = 'ENG'
+  AND e.exam_type = 'final'
+GROUP BY kp.knowledge_name
+ORDER BY ""得分率"" ASC, ""知识点名称"" ASC
+LIMIT 3"
+EDU-027,知识点,medium,九年级期中物理试卷按题型统计题目数和总满分，输出题型（原始编码）、题目数、总满分。,0.75,1.0,True,False,True,结果一致,28.895,completed,,"SELECT
+  eq.question_type AS ""题型"",
+  COUNT(*) AS ""题目数"",
+  SUM(eq.max_score) AS ""总满分""
+FROM exams e
+JOIN exam_questions eq ON e.exam_id = eq.exam_id
+WHERE e.grade = 9
+  AND e.exam_type = 'midterm'
+  AND e.subject_id = 'PHY'
+GROUP BY eq.question_type
+ORDER BY eq.question_type"
+EDU-028,知识点,easy,各学科各年级配置了多少个知识点？输出学科名称、年级、知识点数。,1.0,1.0,True,False,True,结果一致,24.255,completed,,"SELECT 
+  s.subject_name AS ""学科名称"",
+  kp.grade AS ""年级"",
+  COUNT(kp.knowledge_id) AS ""知识点数""
+FROM knowledge_points kp
+JOIN subjects s ON kp.subject_id = s.subject_id
+GROUP BY s.subject_name, kp.grade
+ORDER BY s.subject_name, kp.grade"
+EDU-029,知识点,medium,八年级期末数学答题记录按作答状态统计数量，输出作答状态（原始编码）、记录数。,0.45454545454545453,0.6363636363636364,True,True,False,缺少或无法识别列：记录数,19.565,completed,,"SELECT
+  qr.response_status AS ""作答状态"",
+  COUNT(*) AS ""记录数量""
+FROM question_responses qr
+JOIN exam_results er ON qr.result_id = er.result_id
+JOIN exams e ON er.exam_id = e.exam_id
+WHERE e.grade = 8
+  AND e.exam_type = 'final'
+  AND e.subject_id = 'MAT'
+GROUP BY qr.response_status
+ORDER BY ""记录数量"" DESC"
+EDU-030,知识点,medium,七年级期中数学试卷按知识点统计题目数，输出知识点名称、题目数；每道题只算一次。,1.0,1.0,True,False,False,缺少或无法识别列：题目数,29.466,completed,,"SELECT 
+  kp.knowledge_name AS ""知识点名称"",
+  COUNT(DISTINCT eq.question_id) AS ""题目数量""
+FROM exam_questions eq
+JOIN exams e ON eq.exam_id = e.exam_id
+JOIN knowledge_points kp ON eq.knowledge_id = kp.knowledge_id
+WHERE e.grade = 7
+  AND e.subject_id = 'MAT'
+  AND e.exam_type = 'midterm'
+GROUP BY kp.knowledge_name
+ORDER BY ""题目数量"" DESC, kp.knowledge_name ASC"
+EDU-031,知识点,hard,九年级期末化学各知识点的应答记录数和满分总和是多少？输出知识点名称、应答记录数、满分总和；包含缺考记录，每条学生答题记录对应一次题目满分。,0.5833333333333334,0.75,True,False,True,结果一致,31.709,completed,,"SELECT
+  kp.knowledge_name AS ""知识点名称"",
+  COUNT(qr.response_id) AS ""应答记录数"",
+  SUM(eq.max_score) AS ""满分总和""
+FROM question_responses qr
+JOIN exam_questions eq ON qr.question_id = eq.question_id
+JOIN exams e ON eq.exam_id = e.exam_id
+JOIN knowledge_points kp ON eq.knowledge_id = kp.knowledge_id
+WHERE e.grade = 9
+  AND e.subject_id = 'CHE'
+  AND e.exam_type = 'final'
+GROUP BY kp.knowledge_name
+ORDER BY ""应答记录数"" DESC, ""知识点名称"" ASC"
+EDU-032,知识点,medium,七年级期末语文各题型平均每条答题记录得分是多少？输出题型（原始编码）、平均得分，SQL平均值排除空分数。,0.7272727272727273,0.8181818181818182,True,True,False,缺少或无法识别列：题型,20.713,completed,,"SELECT
+  eq.question_type AS ""题型原始编码"",
+  AVG(qr.score) AS ""平均得分""
+FROM question_responses qr
+JOIN exam_results er ON qr.result_id = er.result_id
+JOIN exams e ON er.exam_id = e.exam_id
+JOIN subjects s ON e.subject_id = s.subject_id
+JOIN exam_questions eq ON qr.question_id = eq.question_id
+WHERE e.grade = 7
+  AND e.exam_type = 'final'
+  AND s.subject_name = '语文'
+GROUP BY eq.question_type
+ORDER BY eq.question_type"
+EDU-033,教学安排,medium,本学期各年级在籍学生有多少人？输出年级、学生人数，按本学期学籍记录统计。,0.8,1.0,True,False,True,结果一致,24.538,completed,,"SELECT 
+  c.grade AS ""年级"",
+  COUNT(DISTINCT e.student_id) AS ""学生人数""
+FROM enrollments e
+JOIN classes c ON e.class_id = c.class_id
+WHERE e.term_id = 'T2025_2026_2'
+GROUP BY c.grade
+ORDER BY c.grade"
+EDU-034,教学安排,easy,列出本学期所有班级的班主任，只输出班级名称、班主任姓名。,0.6,0.6,True,True,True,结果一致,16.504,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  t.teacher_name AS ""班主任姓名""
+FROM classes c
+JOIN teachers t ON c.homeroom_teacher_id = t.teacher_id
+WHERE c.term_id = 'T2025_2026_2'
+ORDER BY c.class_name"
+EDU-035,教学安排,medium,本学期八年级各班数学任课教师是谁，每周几课时？只输出班级名称、教师姓名、周课时数。,1.0,1.0,True,False,True,结果一致,31.152,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  t.teacher_name AS ""教师姓名"",
+  ta.weekly_periods AS ""周课时数""
+FROM teaching_assignments ta
+JOIN classes c ON ta.class_id = c.class_id
+JOIN teachers t ON ta.teacher_id = t.teacher_id
+WHERE ta.term_id = 'T2025_2026_2'
+  AND c.grade = 8
+  AND ta.subject_id = 'MAT'"
+EDU-036,教学安排,medium,本学期每月实际排课多少节？输出月份（YYYY-MM）、课节数，按课节日期分组。,0.8,1.0,True,True,True,结果一致,19.453,completed,,"SELECT 
+  STRFTIME(l.lesson_date, '%Y-%m') AS ""月份"",
+  COUNT(*) AS ""课节数""
+FROM lessons l
+JOIN teaching_assignments ta ON l.teaching_id = ta.teaching_id
+WHERE ta.term_id = 'T2025_2026_2'
+GROUP BY STRFTIME(l.lesson_date, '%Y-%m')
+ORDER BY ""月份"""
+EDU-037,教学安排,easy,教师按职称统计人数和平均教龄，只输出职称、教师人数、平均教龄。,0.6666666666666666,0.6666666666666666,True,True,True,结果一致,16.272,completed,,"SELECT title AS ""职称"", COUNT(*) AS ""教师人数"", ROUND(AVG(teaching_years), 2) AS ""平均教龄"" FROM teachers GROUP BY title ORDER BY ""教师人数"" DESC, ""职称"" ASC"
+EDU-038,教学安排,medium,本学期各班男女学生分别有多少人？输出班级名称、性别（原始编码）、学生人数。,1.0,1.0,True,False,True,结果一致,28.977,completed,,"SELECT 
+  c.class_name AS ""班级名称"",
+  s.gender AS ""性别"",
+  COUNT(*) AS ""学生人数""
+FROM enrollments e
+JOIN classes c ON e.class_id = c.class_id
+JOIN students s ON e.student_id = s.student_id
+WHERE e.term_id = 'T2025_2026_2'
+GROUP BY c.class_name, s.gender
+ORDER BY c.class_name, s.gender"
+EDU-039,教学安排,easy,本学期校历按日期类型统计天数，输出日期类型（原始编码）、天数。,1.0,1.0,True,True,True,结果一致,16.671,completed,,"SELECT day_type AS ""日期类型"", COUNT(*) AS ""天数"" FROM academic_calendar WHERE term_id = 'T2025_2026_2' GROUP BY day_type ORDER BY day_type"
+EDU-040,教学安排,medium,本学期各学科实际排课多少节？输出学科名称、课节数。,1.0,1.0,True,False,True,结果一致,27.163,completed,,"SELECT 
+  s.subject_name AS ""学科名称"",
+  COUNT(l.lesson_id) AS ""课节数""
+FROM lessons l
+JOIN teaching_assignments ta ON l.teaching_id = ta.teaching_id
+JOIN subjects s ON ta.subject_id = s.subject_id
+WHERE ta.term_id = 'T2025_2026_2'
+GROUP BY s.subject_name
+ORDER BY ""课节数"" DESC, s.subject_name ASC"

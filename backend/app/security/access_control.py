@@ -1,38 +1,28 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-import json
-from pathlib import Path
 from typing import Any
 
-from ..database import SCHEMA
+from ..database import DATABASE_SCHEMAS, SCHEMA
 
 
-DATABASE_ID = "short_video_ops"
-ALL_DATABASES = frozenset({DATABASE_ID})
+DATABASE_ID = "school_teaching"
+ALL_DATABASES = frozenset(DATABASE_SCHEMAS)
 ALL_TABLES = frozenset(str(table["id"]) for table in SCHEMA)
 
 
-def _scenario_tables(role: str) -> frozenset[str]:
-    schema_path = (
-        Path(__file__).resolve().parents[2]
-        / "data"
-        / "databases"
-        / DATABASE_ID
-        / "_schema.json"
-    )
-    payload = json.loads(schema_path.read_text(encoding="utf-8"))
+def _scenario_tables(role: str, database: str = DATABASE_ID) -> frozenset[str]:
+    payload = DATABASE_SCHEMAS[database]
     names = set((payload.get("role_tables") or {}).get(role) or [])
     return frozenset(
         str(table["id"])
         for table in SCHEMA
-        if str(table.get("name") or table["id"]).split(".")[-1] in names
+        if table.get("database") == database
+        and str(table.get("name") or table["id"]).split(".")[-1] in names
     )
 
 
-GROWTH_OPS_TABLES = _scenario_tables("growth_ops")
-CHANNEL_OPS_TABLES = _scenario_tables("channel_ops")
-CONTENT_OPS_TABLES = _scenario_tables("content_ops")
+SCHOOL_TABLES = _scenario_tables("academic_admin")
 
 
 @dataclass(frozen=True)
@@ -73,18 +63,14 @@ class AccessScope:
 class AccessController:
     """根据用户角色返回数据库和表权限。"""
 
-    DEFAULT_USER = "demo_growth_ops"
+    DEFAULT_USER = "demo_school"
     USER_ROLES = {
         "demo_admin": ("admin",),
-        "demo_growth_ops": ("growth_ops",),
-        "demo_channel_ops": ("channel_ops",),
-        "demo_content_ops": ("content_ops",),
+        "demo_school": ("academic_admin",),
     }
     ROLE_POLICIES = {
         "admin": {"databases": ALL_DATABASES, "tables": ALL_TABLES},
-        "growth_ops": {"databases": ALL_DATABASES, "tables": GROWTH_OPS_TABLES},
-        "channel_ops": {"databases": ALL_DATABASES, "tables": CHANNEL_OPS_TABLES},
-        "content_ops": {"databases": ALL_DATABASES, "tables": CONTENT_OPS_TABLES},
+        "academic_admin": {"databases": frozenset({"school_teaching"}), "tables": SCHOOL_TABLES},
     }
 
     def resolve(self, user_id: str | None) -> AccessScope:
@@ -108,5 +94,5 @@ class AccessController:
         return [
             table
             for table in SCHEMA
-            if scope.allows_table(DATABASE_ID, str(table["id"]))
+            if scope.allows_table(str(table["database"]), str(table["id"]))
         ]

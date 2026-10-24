@@ -24,21 +24,13 @@ class AuthService:
     """进程内账号认证；令牌在服务重启后失效。"""
 
     ACCOUNTS = {
+        "school": {
+            "password": "school123",
+            "user": AuthUser("demo_school", "school", "学校教务", "academic_admin"),
+        },
         "admin": {
             "password": "admin123",
             "user": AuthUser("demo_admin", "admin", "系统管理员", "admin"),
-        },
-        "growth": {
-            "password": "growth123",
-            "user": AuthUser("demo_growth_ops", "growth", "用户增长运营", "growth_ops"),
-        },
-        "channel": {
-            "password": "channel123",
-            "user": AuthUser("demo_channel_ops", "channel", "渠道投放运营", "channel_ops"),
-        },
-        "content": {
-            "password": "content123",
-            "user": AuthUser("demo_content_ops", "content", "内容运营", "content_ops"),
         },
     }
 
